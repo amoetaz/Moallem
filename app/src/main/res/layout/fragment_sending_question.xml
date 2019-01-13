@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:focusable="true"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#000"
+    tools:context=".ui.fragments.SendingQuestionFragment">
+
+    <include
+        layout="@layout/app_bar_cropimage"
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        />
+
+    <ImageView
+
+        android:scaleType="fitXY"
+        android:background="@drawable/image_border"
+        android:layout_marginEnd="65dp"
+        android:layout_marginStart="65dp"
+        android:layout_marginBottom="65dp"
+        android:layout_marginTop="45dp"
+        android:id="@+id/question_image"
+        android:visibility="visible"
+        android:layout_weight="11"
+        android:src="@drawable/present"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+    <ProgressBar
+        android:visibility="invisible"
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+    <!--android:focusable="false"-->
+    <EditText
+        android:drawablePadding="3dp"
+        android:textSize="15sp"
+        android:drawableStart="@drawable/ic_comment"
+        android:hint="Tell our moallems what helps you need?"
+        android:paddingTop="8dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="10dp"
+        android:gravity="start|top"
+        android:background="#fff"
+        android:id="@+id/edittext_image_comment"
+        android:layout_weight="1.5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+    <Button
+        android:visibility="gone"
+        android:layout_weight="0.18"
+        android:fontFamily="@font/roboto_regular"
+        android:textSize="22sp"
+        android:textColor="#fff"
+        android:background="@drawable/sign_button_style"
+        android:textAllCaps="false"
+        android:id="@+id/buSendImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="Done" />
+
+
+</LinearLayout>

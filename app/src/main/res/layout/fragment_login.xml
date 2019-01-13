@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    tools:context=".ui.fragments.LoginFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <ProgressBar
+
+            android:layout_alignParentTop="true"
+            android:visibility="invisible"
+            android:id="@+id/progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-7dp"
+            android:indeterminate="true"
+            />
+        <TextView
+            android:id="@+id/login_title"
+            android:layout_marginTop="25sp"
+            android:textColor="@color/app_title_color"
+            android:fontFamily="@font/harabara"
+            android:layout_centerHorizontal="true"
+            android:textSize="70sp"
+            android:text="@string/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            style="@style/imagesignuploginStyle"
+            android:layout_below="@id/login_title"
+            android:src="@drawable/emailicomn" />
+
+        <android.support.design.widget.TextInputLayout
+            android:theme="@style/TextLabel"
+            android:id="@+id/login_textinput_email"
+            android:layout_below="@id/login_title"
+            android:orientation="horizontal"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email">
+
+            <EditText
+                style="@style/EdittextStyle"
+                android:id="@+id/login_email"
+                android:inputType="textEmailAddress" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            style="@style/imagesignuploginStyle"
+            android:layout_below="@id/login_textinput_email"
+            android:src="@drawable/lockicon_copy" />
+
+        <android.support.design.widget.TextInputLayout
+            android:theme="@style/TextLabel"
+            android:id="@+id/login_textinput_password"
+            android:layout_below="@id/login_textinput_email"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password">
+
+            <EditText
+                style="@style/EdittextStyle"
+                android:id="@+id/login_password"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <Button
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="22dp"
+            android:textColor="#fff"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/sign_button_style"
+            android:textAllCaps="false"
+            android:layout_below="@id/login_textinput_password"
+            android:id="@+id/buRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:text="Login" />
+
+
+        <com.facebook.login.widget.LoginButton
+
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_below="@id/buRegister"
+            android:id="@+id/button_facebook_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="0dp" />
+
+        <com.twitter.sdk.android.core.identity.TwitterLoginButton
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_below="@id/button_facebook_login"
+            android:id="@+id/button_twitter_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+
+    </RelativeLayout>
+
+
+</ScrollView>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.SessionsFragment"
+    android:background="#fff"
+    >
+
+    <include
+
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar_default"
+        />
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/empty_list_image"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_width="300dp"
+        android:layout_height="300dp" />
+
+    <android.support.v7.widget.RecyclerView
+
+        android:visibility="visible"
+        android:id="@+id/rv_sessions"
+        android:layout_below="@id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

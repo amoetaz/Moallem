@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" android:padding="10dp">
+
+    <solid
+        android:color="@color/colorPrimary"/>
+    <corners
+        android:bottomRightRadius="@dimen/chat_bax_radius"
+        android:bottomLeftRadius="@dimen/chat_bax_radius"
+        android:topLeftRadius="@dimen/chat_bax_radius"
+        android:topRightRadius="@dimen/chat_bax_radius"
+        />
+
+</shape>

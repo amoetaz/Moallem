@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" android:padding="10dp">
+
+    <solid
+        android:color="@color/app_title_color"/>
+    <corners
+        android:bottomRightRadius="@dimen/signup_button_radius"
+        android:bottomLeftRadius="@dimen/signup_button_radius"
+        android:topLeftRadius="@dimen/signup_button_radius"
+        android:topRightRadius="@dimen/signup_button_radius"
+        />
+
+</shape>

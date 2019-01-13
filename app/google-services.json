@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "1081630083510",
+    "firebase_url": "https://moallem-app.firebaseio.com",
+    "project_id": "moallem-app",
+    "storage_bucket": "moallem-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081630083510:android:0c18267029b116f8",
+        "android_client_info": {
+          "package_name": "com.moallem.stu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081630083510-n31h7o7acl1ipar47rtpks13pa08dnkm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moallem.stu",
+            "certificate_hash": "0fd875bdc38cccc68a3b03488e381ce3f3e6f3f1"
+          }
+        },
+        {
+          "client_id": "1081630083510-jiiai3803tu08kb2mfj2jvmun73vaf2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCABc5KsZVpc1jhc-5D80FCogUxZS1RRU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081630083510-jiiai3803tu08kb2mfj2jvmun73vaf2g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081630083510:android:a81a2d6a99996759",
+        "android_client_info": {
+          "package_name": "com.moallem.tutor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081630083510-ib82opfgm60taio5bea1klqfu7cr1niv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moallem.tutor",
+            "certificate_hash": "e682fc1933dac4b0f68f8e508f6321fec73181a7"
+          }
+        },
+        {
+          "client_id": "1081630083510-jiiai3803tu08kb2mfj2jvmun73vaf2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCABc5KsZVpc1jhc-5D80FCogUxZS1RRU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081630083510-jiiai3803tu08kb2mfj2jvmun73vaf2g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
