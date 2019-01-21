@@ -36,6 +36,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static com.moallem.stu.utilities.FirebaseConstants.EMAIL_NODE;
+import static com.moallem.stu.utilities.FirebaseConstants.ISTHEREUNFINISHEDSESSION;
 import static com.moallem.stu.utilities.FirebaseConstants.USERINFO_NODE;
 import static com.moallem.stu.utilities.FirebaseConstants.USERNAME_NODE;
 
@@ -229,15 +230,16 @@ public class SignupFragment extends Fragment {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                mDatabase.child(USERINFO_NODE).child(userId)
+            mDatabase.child(USERINFO_NODE).child(userId)
                         .child(EMAIL_NODE).setValue(emailStr);
-
-                mDatabase.child(USERINFO_NODE).child(userId)
+            mDatabase.child(USERINFO_NODE).child(userId)
                         .child(USERNAME_NODE).setValue(username.getText().toString());
 
             mDatabase.child(USERINFO_NODE).child(userId)
                     .child("education").setValue(Edu.getText().toString());
 
+            mDatabase.child(USERINFO_NODE).child(userId)
+                    .child(ISTHEREUNFINISHEDSESSION).setValue(false);
 
         }
 

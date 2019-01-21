@@ -69,6 +69,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.moallem.stu.utilities.FirebaseConstants.ISFINISHED_NODE;
 import static com.moallem.stu.utilities.FirebaseConstants.ISSTUDENTREACHERZERO_NODE;
+import static com.moallem.stu.utilities.FirebaseConstants.ISTHEREUNFINISHEDSESSION;
 import static com.moallem.stu.utilities.FirebaseConstants.MESSAGES_INFO;
 import static com.moallem.stu.utilities.FirebaseConstants.MONEYBALANCE_NODE;
 import static com.moallem.stu.utilities.FirebaseConstants.QUESTIONIDS_NODES;
@@ -250,7 +251,10 @@ public class ChattingFragment extends Fragment {
                             .setValue(true);
                     hideViews(sendPhoto,msText,sendData,timer,speakOrder,sendAudio);
                     showViews(sessionEndedText);
+                    reference.child(USERINFO_NODE).child(Utils.getCurrentUserId())
+                            .child(ISTHEREUNFINISHEDSESSION).setValue(false);
                     stopChatTimer();
+                    setIsThereUnfinishedSession();
                 }
             });
             builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -262,6 +266,11 @@ public class ChattingFragment extends Fragment {
             AlertDialog dialog = builder.create();
             dialog.show();
         }
+    }
+
+    public void setIsThereUnfinishedSession(){
+        reference.child(USERINFO_NODE).child(Utils.getCurrentUserId())
+                .child(ISTHEREUNFINISHEDSESSION).setValue(false);
     }
 
     private void listenToSessionEnded() {
@@ -298,12 +307,14 @@ public class ChattingFragment extends Fragment {
                         Boolean isReached = dataSnapshot.getValue(Boolean.class);
 
                         if (isReached != null && isReached) {
+                            Toast.makeText(getActivity(), "Your balance now less than one miute", Toast.LENGTH_SHORT).show();
                             session.setStudentReachedZeroMins(true);
                             ((TextView) toolbar.findViewById(R.id.end_session_textview))
                                     .setText(R.string.exit_session_text);
                             hideViews(sendPhoto, msText, sendData, timer, speakOrder, sendAudio);
                             showViews(sessionEndedText);
                             stopChatTimer();
+                            setIsThereUnfinishedSession();
                         }
                     }
 

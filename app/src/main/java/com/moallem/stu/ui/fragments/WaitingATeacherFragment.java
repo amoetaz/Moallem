@@ -25,6 +25,7 @@ import com.moallem.stu.R;
 import com.moallem.stu.models.Session;
 import com.moallem.stu.models.Subject;
 import com.moallem.stu.ui.activities.ChattingActivity;
+import com.moallem.stu.utilities.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,10 +34,12 @@ import butterknife.Unbinder;
 import static com.moallem.stu.utilities.FirebaseConstants.ISFINISHED_NODE;
 import static com.moallem.stu.utilities.FirebaseConstants.ISREPLYED_NODE;
 import static com.moallem.stu.utilities.FirebaseConstants.ISSTUDENTREACHERZERO_NODE;
+import static com.moallem.stu.utilities.FirebaseConstants.ISTHEREUNFINISHEDSESSION;
 import static com.moallem.stu.utilities.FirebaseConstants.QUESTIONIDS_NODES;
 import static com.moallem.stu.utilities.FirebaseConstants.SUBJECTS_NODE;
 import static com.moallem.stu.utilities.FirebaseConstants.TEACHERID_NODE;
 import static com.moallem.stu.utilities.FirebaseConstants.TEACHERNAME_NODE;
+import static com.moallem.stu.utilities.FirebaseConstants.USERINFO_NODE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,6 +107,7 @@ public class WaitingATeacherFragment extends Fragment {
                         Boolean isReplyed = dataSnapshot.getValue(Boolean.class);
                         if (isReplyed != null && isReplyed) {
                             isAnswered = true;
+                            setIsThereUnfinishedSession();
                             try {
                                 Thread.sleep(1500);
                             } catch (InterruptedException e) {
@@ -224,4 +228,8 @@ public class WaitingATeacherFragment extends Fragment {
     }
 
 
+    public void setIsThereUnfinishedSession(){
+        mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId())
+                .child(ISTHEREUNFINISHEDSESSION).setValue(true);
+    }
 }

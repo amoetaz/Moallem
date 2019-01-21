@@ -22,4 +22,5 @@ public class FirebaseConstants {
     public static final String DATE_NODE = "date";
 
     public static final String MONEYBALANCE_NODE = "moneyBalance";
+    public static final String ISTHEREUNFINISHEDSESSION = "isThereUnfinishedSession";
 }

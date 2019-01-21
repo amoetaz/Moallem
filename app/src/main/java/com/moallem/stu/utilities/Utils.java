@@ -18,6 +18,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class Utils {
 
+    //TODO : replace chattingfragment variable
+    public static long chatLenght = 0;
+
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;

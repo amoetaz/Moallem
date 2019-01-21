@@ -54,6 +54,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.moallem.stu.utilities.FirebaseConstants.ISTHEREUNFINISHEDSESSION;
 import static com.moallem.stu.utilities.FirebaseConstants.USERINFO_NODE;
 import static com.moallem.stu.utilities.FirebaseConstants.USERNAME_NODE;
 
@@ -270,6 +271,9 @@ public class LoginFragment extends Fragment {
         if (newUser){
             databaseReference.child(USERINFO_NODE).child(uid)
                     .child(USERNAME_NODE).setValue(firebaseAuth.getCurrentUser().getDisplayName());
+
+            databaseReference.child(USERINFO_NODE).child(uid)
+                    .child(ISTHEREUNFINISHEDSESSION).setValue(false);
         }
 
     }
@@ -297,8 +301,6 @@ public class LoginFragment extends Fragment {
         AuthCredential credential = TwitterAuthProvider.getCredential(
                 session.getAuthToken().token,
                 session.getAuthToken().secret);
-
-
 
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {

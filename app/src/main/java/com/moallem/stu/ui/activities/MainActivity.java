@@ -55,10 +55,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.moallem.stu.utilities.FirebaseConstants.ISTHEREUNFINISHEDSESSION;
 import static com.moallem.stu.utilities.FirebaseConstants.SUBJECTS_NODE;
 import static com.moallem.stu.utilities.FirebaseConstants.USERINFO_NODE;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity  implements SampleRecyclerViewAdapter.OnItemClicked {
 
     private static final String TAG = "MainActivity";
 
@@ -75,6 +76,8 @@ public class MainActivity extends AppCompatActivity  {
     private ChildEventListener childEventListener;
     private Drawer drawer;
     private PrimaryDrawerItem item2;
+    private boolean isThereUnfinishedSession;
+    private ChildEventListener checkerChildEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity  {
 
         configNavigationDrawer();
     }
+
 
     private void getCountryName() {
         try {
@@ -215,7 +219,7 @@ public class MainActivity extends AppCompatActivity  {
         String countryCode = PrefsHelper.getInstance(this).getCountryCode();
         if (countryCode == null || countryCode.equals("none")) {
             Toast.makeText(this, "Please make sure SIM card is inserted", Toast.LENGTH_SHORT).show();
-        }else if (/*fromAllowedCounteries(countryCode)*/true){
+        }else if (fromAllowedCounteries(countryCode)){
             startActivity(new Intent(MainActivity.this
                     ,PaymentActivity.class));
         }else {
@@ -286,22 +290,26 @@ public class MainActivity extends AppCompatActivity  {
 
         rcAdapter = new SampleRecyclerViewAdapter(getApplicationContext(),sList);
         recyclerView.setAdapter(rcAdapter);
+        rcAdapter.setOnClick(MainActivity.this);
 
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
-                String subjectName = dataSnapshot.child("name").getValue(String.class);
-                String subjectIconUrl = dataSnapshot.child("subIcon").getValue(String.class);
-                String key = dataSnapshot.getKey();
-                String arabicName = dataSnapshot.child("arabicName").getValue(String.class);
-                Subject subject = new Subject();
 
-                subject.setArabicName(arabicName);
-                subject.setName(subjectName);
-                subject.setImage(subjectIconUrl);
-                subject.setKey(key);
-                sList.add(subject);
-                rcAdapter.notifyItemInserted(sList.size() - 1);
+                if (checkIfNodesExists(dataSnapshot,"name","subIcon","arabicName")) {
+                    String subjectName = dataSnapshot.child("name").getValue(String.class);
+                    String subjectIconUrl = dataSnapshot.child("subIcon").getValue(String.class);
+                    String key = dataSnapshot.getKey();
+                    String arabicName = dataSnapshot.child("arabicName").getValue(String.class);
+                    Subject subject = new Subject();
+
+                    subject.setArabicName(arabicName);
+                    subject.setName(subjectName);
+                    subject.setImage(subjectIconUrl);
+                    subject.setKey(key);
+                    sList.add(subject);
+                    rcAdapter.notifyItemInserted(sList.size() - 1);
+                }
             }
 
             @Override
@@ -392,4 +400,74 @@ public class MainActivity extends AppCompatActivity  {
         getCountryName();
     }
 
+    @Override
+    public void onItemClick(int position) {
+        if (PrefsHelper.getInstance(getApplicationContext()).getUserType().equals("student")) {
+            checkBalanceAndLaunchActivity(sList.get(position));
+        } else {
+            Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void checkBalanceAndLaunchActivity(Subject subect) {
+
+        mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId())
+                .child("timeBalance").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Double balance = dataSnapshot.getValue(Double.class);
+                    if (balance != null && balance >= 60){
+                        checkForUnfinishedSession(subect);
+                    }else {
+                        Toast.makeText(getApplicationContext(), "Your balance must be more or equal 1 minutes", Toast.LENGTH_LONG).show();
+                    }
+                }else {
+                    Toast.makeText(getApplicationContext(), "Your balance must be more or equal 1 minutes", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void checkForUnfinishedSession(Subject subect){
+        mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId())
+                .child(ISTHEREUNFINISHEDSESSION).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Boolean isThereUnfinishedSession = dataSnapshot.getValue(Boolean.class);
+                    if (isThereUnfinishedSession != null && !isThereUnfinishedSession){
+                        startActivity(new Intent(getApplicationContext(), PostingQuestionActivity.class)
+                                .putExtra("subjectInfo",subect)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }else {
+                        Toast.makeText(MainActivity.this, "Please end the unfinished question", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId())
+                            .child(ISTHEREUNFINISHEDSESSION).setValue(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public boolean checkIfNodesExists (DataSnapshot snapshot ,String ... ss){
+        for (String s : ss){
+            if (!snapshot.child(s).exists())
+                return false;
+        }
+        return true;
+    }
 }
