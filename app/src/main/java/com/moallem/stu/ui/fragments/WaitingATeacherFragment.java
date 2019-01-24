@@ -199,7 +199,7 @@ public class WaitingATeacherFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (!isAnswered) {
+        /*if (!isAnswered) {
             deleteSession();
             deleteSessionData();
             Toast.makeText(getActivity(), "Question has been deleted", Toast.LENGTH_SHORT).show();
@@ -208,7 +208,7 @@ public class WaitingATeacherFragment extends Fragment {
         getActivity();
         if (getActivity() != null) {
             getActivity().finish();
-        }
+        }*/
 
     }
 

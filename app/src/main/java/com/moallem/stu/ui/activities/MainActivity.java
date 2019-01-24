@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
         if (Utils.isNetworkConnected(getApplicationContext())) {
             initList();
         }else {
-            Toast.makeText(this, "Check internet connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.check_internet_msg, Toast.LENGTH_SHORT).show();
         }
 
         configNavigationDrawer();

@@ -24,6 +24,8 @@ public class InitTransition implements Parcelable {
     @Expose
     private String msisdn;
 
+
+
     public InitTransition(){
 
     }
@@ -85,9 +87,13 @@ public class InitTransition implements Parcelable {
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [transactionId = "+transactionId+", operationStatusCode = "+operationStatusCode+"]";
+    public String toString() {
+        return "InitTransition{" +
+                "transactionId='" + transactionId + '\'' +
+                ", operationStatusCode='" + operationStatusCode + '\'' +
+                ", errorMessage='" + errorMessage + '\'' +
+                ", msisdn='" + msisdn + '\'' +
+                '}';
     }
 
     @Override

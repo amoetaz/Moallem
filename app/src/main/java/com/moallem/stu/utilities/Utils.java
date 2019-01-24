@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.moallem.stu.R;
 import com.moallem.stu.data.PrefsHelper;
 
@@ -20,6 +21,14 @@ public class Utils {
 
     //TODO : replace chattingfragment variable
     public static long chatLenght = 0;
+
+    public static boolean checkIfNodesExists (DataSnapshot snapshot , String ... ss){
+        for (String s : ss){
+            if (!snapshot.child(s).exists())
+                return false;
+        }
+        return true;
+    }
 
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

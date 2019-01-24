@@ -3,6 +3,7 @@ package com.moallem.stu.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,6 +24,7 @@ import com.moallem.stu.api.ApiService;
 import com.moallem.stu.data.PrefsHelper;
 import com.moallem.stu.models.InitRequest;
 import com.moallem.stu.models.InitTransition;
+import com.moallem.stu.utilities.MsisdnRegex;
 import com.moallem.stu.utilities.RandomString;
 import com.moallem.stu.utilities.Utils;
 
@@ -67,6 +69,11 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
     TextView price4;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
+    String PublicKey = "9Bmi9BAHwvTIB61hRHft";
+    String PrivateKey = "QPshyAvwS6HBrBCBNdqb";
+    String msisdn;
+    private String itemPrice,itemAmount;
+    private String [] operatorsCode,productCats,prices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +81,11 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
         setContentView(R.layout.activity_payment);
         ButterKnife.bind(this);
 
-        String[] operatorsCode = getOperatorsCode();
-        String[] productCats = getProductCats();
-        String[] prices = getPrices();
+        operatorsCode = getOperatorsCode();
+        productCats = getProductCats();
+        prices = getPrices();
+        itemPrice = prices[0];
+        itemAmount = "10 Minutes";
         initialzePrices(prices);
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this
                 , R.array.egyptOperatersName, android.R.layout.simple_spinner_item);
@@ -103,11 +112,16 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
             @Override
             public void onClick(View v) {
                 if (Utils.isNetworkConnected(getApplicationContext())) {
-                    callApi();
-                    progressBar.setVisibility(View.VISIBLE);
-                    preventInteracting();
+                    msisdn = getPhoneNumber(userPhoneNumber.getText().toString());
+                    if (MsisdnRegex.isValidMsisdn(msisdn)) {
+                        callApi();
+                        progressBar.setVisibility(View.VISIBLE);
+                        preventInteracting();
+                    } else {
+                        Toast.makeText(PaymentActivity.this, R.string.valid_num_msg, Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(PaymentActivity.this, "check Internet Connetction", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PaymentActivity.this, R.string.check_internet_msg, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -148,15 +162,13 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
 
     private void callApi() {
 
-        String PublicKey = "9Bmi9BAHwvTIB61hRHft";
-        String PrivateKey = "QPshyAvwS6HBrBCBNdqb";
-        String Msisdn = getPhoneNumber(userPhoneNumber.getText().toString());
+
         String OrderInfo = new RandomString(8, new Random()).nextString();
-        String message = ProductCatalogName + productId + Msisdn + operatorCode + OrderInfo;
+        String message = ProductCatalogName + productId + msisdn + operatorCode + OrderInfo;
         String signature = Utils.CalculateDigest(PublicKey, message, PrivateKey);
 
         InitRequest initRequest = new InitRequest();
-        initRequest.setMsisdn(Msisdn);
+        initRequest.setMsisdn(msisdn);
         initRequest.setOperatorCode(operatorCode);
         initRequest.setOrderInfo(OrderInfo);
         initRequest.setProductCatalogName(ProductCatalogName);
@@ -179,17 +191,21 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
                         Intent intent = new Intent(PaymentActivity.this, VerificationPincodeActivity.class);
                         intent.putExtra("request", initRequest);
                         intent.putExtra("transition", initTransition);
+                        intent.putExtra("itemprice", itemPrice);
+                        intent.putExtra("itemamount", itemAmount);
                         startActivity(intent);
 
                     } else if ((initTransition.getOperationStatusCode().equals("4"))) {
 
                         Toast.makeText(PaymentActivity.this, "You don't have enough credit to purchase minutes", Toast.LENGTH_SHORT).show();
                     } else{
-                        Toast.makeText(PaymentActivity.this, "Something went wrong please", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 }else{
                     Toast.makeText(PaymentActivity.this, "Something went wrong please try again", Toast.LENGTH_SHORT).show();
                 }
+
+                Log.d(TAG, "onResponse: "+initTransition);
 
             }
 
@@ -238,21 +254,29 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             if (buttonView == radioQuantity1) {
+                itemPrice = prices[0];
+                itemAmount = "10 Minutes";
                 productId = "10M_price";
                 radioQuantity1.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity2, radioQuantity3, radioQuantity4);
                 uncheckRadioButton(radioQuantity2, radioQuantity3, radioQuantity4);
             } else if (buttonView == radioQuantity2) {
+                itemPrice = prices[1];
+                itemAmount = "20 Minutes";
                 productId = "20M_price";
                 radioQuantity2.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity1, radioQuantity3, radioQuantity4);
                 uncheckRadioButton(radioQuantity1, radioQuantity3, radioQuantity4);
             } else if (buttonView == radioQuantity3) {
+                itemPrice = prices[2];
+                itemAmount = "30 Minutes";
                 productId = "30M_price";
                 radioQuantity3.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity1, radioQuantity2, radioQuantity4);
                 uncheckRadioButton(radioQuantity1, radioQuantity2, radioQuantity4);
             } else if (buttonView == radioQuantity4) {
+                itemPrice = prices[3];
+                itemAmount = "60 Minutes";
                 productId = "60M_price";
                 radioQuantity4.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity2, radioQuantity3, radioQuantity1);

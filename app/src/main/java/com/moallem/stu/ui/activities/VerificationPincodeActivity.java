@@ -66,6 +66,9 @@ public class VerificationPincodeActivity extends AppCompatActivity {
     VerificationResponse verificationResponse;
     @BindView(R.id.resend_pincode)
     TextView resendPincode;
+    @BindView(R.id.price_confirmation)
+    TextView priceConfirmation;
+    String itemPrice , itemAmount;
     int counter = 0;
     private static final String COUNTER_KEY = "counter";
 
@@ -89,7 +92,11 @@ public class VerificationPincodeActivity extends AppCompatActivity {
         if (getIntent().hasExtra("request") && getIntent().hasExtra("transition")) {
             initRequest = getIntent().getExtras().getParcelable("request");
             initTransition = getIntent().getExtras().getParcelable("transition");
+            itemPrice = getIntent().getExtras().getString("itemprice");
+            itemAmount = getIntent().getExtras().getString("itemamount");
         }
+
+        priceConfirmation.setText("You will perchase "+itemAmount+" for "+itemPrice);
         screenPhonenumber.setText(initRequest.getMsisdn());
         moveToNextEdittext(pin1, pin2);
         moveToNextEdittext(pin2, pin3);

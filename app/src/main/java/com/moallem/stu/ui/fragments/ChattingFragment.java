@@ -121,6 +121,7 @@ public class ChattingFragment extends Fragment {
     private String fileNameEndPoint;
     private ValueEventListener teacherStatusEventListener;
     private final long maxNumber = 3000000;
+    private final String [] msgArgs = {"msg","msgType","senderId","senderType"};
 
 
     public ChattingFragment() {
@@ -223,7 +224,7 @@ public class ChattingFragment extends Fragment {
                         uploadAudio();
                         Toast.makeText(getContext(), "sending ...", Toast.LENGTH_SHORT).show();
                     } else
-                        Toast.makeText(getContext(), "Press mic icon and release when finish", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Press mic icon then release when finish", Toast.LENGTH_SHORT).show();
                 }
                 return false;
             }
@@ -243,7 +244,7 @@ public class ChattingFragment extends Fragment {
     private void showConfirmDialog(){
         if (getActivity() != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Are you sure to end this session?");
+            builder.setTitle("Are you sure to end this question?");
             builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     reference.child("subjects").child(session.getQuestionType().toLowerCase()).child(QUESTIONIDS_NODES)
@@ -465,21 +466,24 @@ public class ChattingFragment extends Fragment {
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
-                        Message message = new Message();
 
-                        String msg = dataSnapshot.child("msg").getValue(String.class);
-                        String msgType = dataSnapshot.child("msgType").getValue(String.class);
-                        String senderId = dataSnapshot.child("senderId").getValue(String.class);
-                        String senderType = dataSnapshot.child("senderType").getValue(String.class);
+                        if (Utils.checkIfNodesExists(dataSnapshot,msgArgs)) {
+                            Message message = new Message();
 
-                        message.setMsg(msg);
-                        message.setMsgType(msgType);
-                        message.setSenderId(senderId);
-                        message.setSenderType(senderType);
+                            String msg = dataSnapshot.child("msg").getValue(String.class);
+                            String msgType = dataSnapshot.child("msgType").getValue(String.class);
+                            String senderId = dataSnapshot.child("senderId").getValue(String.class);
+                            String senderType = dataSnapshot.child("senderType").getValue(String.class);
 
-                        messages.add(message);
+                            message.setMsg(msg);
+                            message.setMsgType(msgType);
+                            message.setSenderId(senderId);
+                            message.setSenderType(senderType);
 
-                        adapter.notifyItemInserted(messages.size() - 1);
+                            messages.add(message);
+
+                            adapter.notifyItemInserted(messages.size() - 1);
+                        }
                     }
 
                     @Override

@@ -17,10 +17,13 @@
     <string name="wrong_message">Something went wrong</string>
     <string name="ok">confirm_end_session</string>
     <string name="cancel">cancel_end_session</string>
-    <string name="waiting_msg">Please wait for a teacher or press back button to cancel\nHome button also will do the same\nNote : your balance will NOT be changed until a teacher accept your question</string>
+    <string name="waiting_msg">Please wait for a teacher or press back button to cancel\nNote : your balance will NOT be changed until a teacher accept your question</string>
     <string name="end_session_text">End</string>
     <string name="exit_session_text">Exit</string>
-    <string name="edit_your_image_text">Edit your image</string>
+    <string name="edit_your_image_text" >Edit your image</string>
+    <string name="purchase_button">Purchase</string>
+    <string name="check_internet_msg">Please check Internet Connetection</string>
+    <string name="valid_num_msg">Please enter valid number</string>
 
     <string-array name="choices">
         <item>Egypt</item>
