@@ -3,7 +3,6 @@ package com.moallem.stu.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -197,21 +196,21 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
 
                     } else if ((initTransition.getOperationStatusCode().equals("4"))) {
 
-                        Toast.makeText(PaymentActivity.this, "You don't have enough credit to purchase minutes", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivity.this, R.string.dont_have_credit, Toast.LENGTH_SHORT).show();
                     } else{
-                        Toast.makeText(PaymentActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivity.this, R.string.wrong_message, Toast.LENGTH_SHORT).show();
                     }
                 }else{
-                    Toast.makeText(PaymentActivity.this, "Something went wrong please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PaymentActivity.this, R.string.wrong_msg_try_again, Toast.LENGTH_SHORT).show();
                 }
 
-                Log.d(TAG, "onResponse: "+initTransition);
+                //Log.d(TAG, "onResponse: "+initTransition);
 
             }
 
             @Override
             public void onFailure(Call<InitTransition> call, Throwable t) {
-                Toast.makeText(PaymentActivity.this, "Something went wrong try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PaymentActivity.this, R.string.wrong_msg_try_again, Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.INVISIBLE);
                 allowInteracting();
             }

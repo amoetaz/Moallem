@@ -31,7 +31,7 @@
                 android:fontFamily="@font/roboto_regular"
                 android:layout_centerHorizontal="true"
                 android:textSize="20sp"
-                android:text="Weclome to Moallem!"
+                android:text="@string/weclome_to_moallem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -44,7 +44,7 @@
                 android:textSize="25sp"
                 android:textColor="@color/app_title_color"
                 android:background="@drawable/option_button_style"
-                android:text="Sign up"
+                android:text="@string/sign_up_textbutton"
                 android:layout_marginTop="90dp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/option_title"
@@ -63,7 +63,7 @@
                 android:fontFamily="@font/roboto_regular"
                 android:layout_centerHorizontal="true"
                 android:textSize="22sp"
-                android:text="Already have an acccont?\nplease Login"
+                android:text="@string/already_have_acccont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

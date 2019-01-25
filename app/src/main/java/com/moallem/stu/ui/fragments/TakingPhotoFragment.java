@@ -59,7 +59,7 @@ public class TakingPhotoFragment extends Fragment {
 
                  goToFregment(result.getUri());
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(getActivity(), "Cropping failed Please try again ", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.cropping_failed, Toast.LENGTH_LONG).show();
             }
         }
     }

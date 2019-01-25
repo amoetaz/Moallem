@@ -136,21 +136,21 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
     private void showConfirmDialogForUpdate(){
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("New version of the app was released ,update now?");
+            builder.setTitle(R.string.new_version_notifai);
 
-            builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.alert_ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     openApplink();
 
                 }
             });
-            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.alert_cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User cancelled the dialog
                 }
             });
 
-            builder.setNeutralButton("don't show again?", new DialogInterface.OnClickListener() {
+            builder.setNeutralButton(R.string.alert_dont_show_again, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Toast.makeText(MainActivity.this, ""+which, Toast.LENGTH_SHORT).show();
@@ -165,14 +165,14 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
 
     private void configNavigationDrawer() {
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIcon(R.drawable.test_icon)
-                .withIdentifier(1).withName("Sessions");
+                .withIdentifier(1).withName(R.string.session_navigationdrawer);
 
         item2 = new PrimaryDrawerItem().withIcon(R.drawable.ic_minutes).withBadge("0")
                 .withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.app_title_color))
-                .withIdentifier(2).withName("Minutes");
+                .withIdentifier(2).withName(R.string.minutes_navigationdrawer);
 
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIcon(R.drawable.ic_signout)
-                .withIdentifier(3).withName("Sign out");
+                .withIdentifier(3).withName(R.string.signout_navigationdrawer);
 
 
         AccountHeader header = new AccountHeaderBuilder()
@@ -218,12 +218,12 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
     private void startPaymentActivity() {
         String countryCode = PrefsHelper.getInstance(this).getCountryCode();
         if (countryCode == null || countryCode.equals("none")) {
-            Toast.makeText(this, "Please make sure SIM card is inserted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.make_sure_sim_insered, Toast.LENGTH_SHORT).show();
         }else if (fromAllowedCounteries(countryCode)){
             startActivity(new Intent(MainActivity.this
                     ,PaymentActivity.class));
         }else {
-            Toast.makeText(this, "this section is not allowed for your country for this version", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.this_section_not_allowed, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -405,7 +405,7 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
         if (PrefsHelper.getInstance(getApplicationContext()).getUserType().equals("student")) {
             checkBalanceAndLaunchActivity(sList.get(position));
         } else {
-            Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.wrong_message, Toast.LENGTH_SHORT).show();
         }
 
     }

@@ -34,7 +34,7 @@
             android:gravity="center"
             android:textColor="@color/colorPrimary"
             android:textSize="23sp"
-            android:text="Session ended"
+            android:text="@string/session_ended"
             android:id="@+id/session_end_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -54,7 +54,7 @@
             android:gravity="center"
             android:textColor="@color/colorPrimary"
             android:textSize="22sp"
-            android:text="Speak now ..."
+            android:text="@string/speak_now"
             android:id="@+id/speakorder"
             android:layout_marginStart="50dp"
             android:layout_toEndOf="@id/timer"
@@ -70,7 +70,7 @@
             android:layout_width="40dp"
             android:layout_height="match_parent" />
         <EditText
-            android:hint="Enter a message"
+            android:hint="@string/enter_a_message"
             android:id="@+id/msg_text"
             android:textSize="15sp"
             android:paddingStart="20dp"

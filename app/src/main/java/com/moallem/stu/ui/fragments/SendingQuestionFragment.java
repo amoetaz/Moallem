@@ -167,7 +167,7 @@ public class SendingQuestionFragment extends Fragment {
 
                         node.setValue(newSession);
                         progressBar.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getActivity(), "Question has been posted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.question_posted, Toast.LENGTH_SHORT).show();
 
                         WaitingATeacherFragment waitingATeacherFragment = new WaitingATeacherFragment();
                         Bundle bundle = new Bundle();

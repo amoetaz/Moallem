@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/TextLabel"
-            android:hint="Username">
+            android:hint="@string/username_hint">
 
             <android.support.v7.widget.AppCompatEditText
                 style="@style/EdittextStyle"
@@ -70,7 +70,7 @@
             android:layout_marginEnd="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email Address">
+            android:hint="@string/email_hint">
 
             <EditText
                 style="@style/EdittextStyle"
@@ -91,7 +91,7 @@
             android:layout_marginEnd="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password">
+            android:hint="@string/password_hint">
 
             <EditText
                 style="@style/EdittextStyle"
@@ -116,11 +116,11 @@
             android:layout_marginEnd="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Education">
+            android:hint="@string/education_hint">
 
             <EditText
                 android:gravity="top"
-                android:textSize="17dp"
+                android:textSize="17sp"
                 android:id="@+id/signup_edu"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
@@ -141,7 +141,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:text="Sign up" />
+            android:text="@string/sign_up_buttontext" />
 
     </RelativeLayout>
 

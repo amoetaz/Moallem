@@ -43,7 +43,7 @@
         android:drawablePadding="3dp"
         android:textSize="15sp"
         android:drawableStart="@drawable/ic_comment"
-        android:hint="Tell our moallems what helps you need?"
+        android:hint="@string/tell_moallems_what_you_need"
         android:paddingTop="8dp"
         android:paddingStart="15dp"
         android:paddingEnd="10dp"
@@ -64,7 +64,7 @@
         android:id="@+id/buSendImage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="Done" />
+        android:text="@string/done_buttontext" />
 
 
 </LinearLayout>

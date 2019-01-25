@@ -96,7 +96,7 @@ public class VerificationPincodeActivity extends AppCompatActivity {
             itemAmount = getIntent().getExtras().getString("itemamount");
         }
 
-        priceConfirmation.setText("You will perchase "+itemAmount+" for "+itemPrice);
+        setPriceConfirmation();
         screenPhonenumber.setText(initRequest.getMsisdn());
         moveToNextEdittext(pin1, pin2);
         moveToNextEdittext(pin2, pin3);
@@ -123,6 +123,14 @@ public class VerificationPincodeActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void setPriceConfirmation() {
+        if (Utils.getDeviceLanguage(this).equals("arabic")) {
+            priceConfirmation.setText(itemPrice+"بسعر "+itemAmount+"سوف تشتري ");
+        } else {
+            priceConfirmation.setText("You will perchase "+itemAmount+" for "+itemPrice);
+        }
     }
 
     private void resendPincode() {
@@ -152,11 +160,11 @@ public class VerificationPincodeActivity extends AppCompatActivity {
                     if (body.getOperationStatusCode() != null && body.getOperationStatusCode().equals("0")){
                         counter++;
                         Toast.makeText(VerificationPincodeActivity.this
-                                , "Pin Code has been sent ", Toast.LENGTH_SHORT).show();
+                                , R.string.pin_sent_toast, Toast.LENGTH_SHORT).show();
                     }
                 }else {
                     Toast.makeText(VerificationPincodeActivity.this,
-                            "Something went wrong please try again", Toast.LENGTH_SHORT).show();
+                            R.string.wrong_msg_try_again, Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -166,7 +174,7 @@ public class VerificationPincodeActivity extends AppCompatActivity {
             public void onFailure(Call<ResendPincodeResponse> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
                 allowInteracting();
-                Toast.makeText(VerificationPincodeActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(VerificationPincodeActivity.this, R.string.wrong_message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -178,7 +186,7 @@ public class VerificationPincodeActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
             preventInteracting();
         } else {
-            Toast.makeText(this, "Check Internet Connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.check_internet_msg, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -217,21 +225,21 @@ public class VerificationPincodeActivity extends AppCompatActivity {
                             updateFirebaseMoneyPaidValue(verificationResponse.getAmountCharged()
                                     , verificationResponse.getCurrencyCode());
                             updateFirebaseBalanceValues(getMinutes(initRequest.getProductId()));
-                            Toast.makeText(VerificationPincodeActivity.this, "You successfully purchased 10 minutes", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VerificationPincodeActivity.this, "You successfully purchased "+itemAmount, Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(VerificationPincodeActivity.this,PaymentCongrateActivity.class));
                             finish();
                         }
 
                         else {
-                            Toast.makeText(VerificationPincodeActivity.this, "Something went wrong please try again", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VerificationPincodeActivity.this, R.string.wrong_msg_try_again, Toast.LENGTH_SHORT).show();
                         }
 
                     }else if (verificationResponse.getOperationStatusCode().equals("11")){
-                        Toast.makeText(VerificationPincodeActivity.this, "invalid pin code", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VerificationPincodeActivity.this, R.string.invalid_pincode_toast, Toast.LENGTH_SHORT).show();
                     }
 
                     else {
-                        Toast.makeText(VerificationPincodeActivity.this, "Something went wrong please try again", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VerificationPincodeActivity.this, R.string.wrong_msg_try_again, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -240,7 +248,7 @@ public class VerificationPincodeActivity extends AppCompatActivity {
             public void onFailure(Call<VerificationResponse> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
                 allowInteracting();
-                Toast.makeText(VerificationPincodeActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(VerificationPincodeActivity.this, R.string.wrong_message, Toast.LENGTH_SHORT).show();
             }
         });
     }

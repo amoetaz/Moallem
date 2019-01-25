@@ -34,7 +34,7 @@
             android:textColor="#fff"
             android:fontFamily="@font/roboto_regular"
             android:textSize="28sp"
-            android:text="Congratulation!\n\nYour Minutes have been added to your account\n\nStart learing NOW!"
+            android:text="@string/congrate_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -56,7 +56,7 @@
         android:textColor="@color/app_text_color"
         android:fontFamily="@font/roboto_regular"
         android:textSize="28sp"
-        android:text="Thanks for using Moallem"
+        android:text="@string/thanks_msg4using_maollem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

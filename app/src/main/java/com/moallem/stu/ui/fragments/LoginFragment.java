@@ -194,7 +194,7 @@ public class LoginFragment extends Fragment {
                         }
                     });
         } else {
-            Toast.makeText(getActivity(), "Please enter valid data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.enter_valid_data, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -256,7 +256,7 @@ public class LoginFragment extends Fragment {
                                         });
 
                             } else {
-                                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), R.string.wrong_message, Toast.LENGTH_SHORT).show();
                             }
                             progressBar.setVisibility(View.INVISIBLE);
                         }
@@ -320,7 +320,7 @@ public class LoginFragment extends Fragment {
 
 
                         } else {
-                            Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.wrong_message, Toast.LENGTH_SHORT).show();
                         }
                         progressBar.setVisibility(View.INVISIBLE);
                     }

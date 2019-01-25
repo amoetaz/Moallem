@@ -244,8 +244,8 @@ public class ChattingFragment extends Fragment {
     private void showConfirmDialog(){
         if (getActivity() != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Are you sure to end this question?");
-            builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            builder.setTitle(R.string.alert_sure_to_end_question);
+            builder.setPositiveButton(R.string.alert_ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     reference.child("subjects").child(session.getQuestionType().toLowerCase()).child(QUESTIONIDS_NODES)
                             .child(session.getKey()).child(ISFINISHED_NODE)
@@ -258,7 +258,7 @@ public class ChattingFragment extends Fragment {
                     setIsThereUnfinishedSession();
                 }
             });
-            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.alert_cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User cancelled the dialog
                 }
@@ -308,7 +308,7 @@ public class ChattingFragment extends Fragment {
                         Boolean isReached = dataSnapshot.getValue(Boolean.class);
 
                         if (isReached != null && isReached) {
-                            Toast.makeText(getActivity(), "Your balance now less than one miute", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.balance_lessthan1minutes_toast, Toast.LENGTH_SHORT).show();
                             session.setStudentReachedZeroMins(true);
                             ((TextView) toolbar.findViewById(R.id.end_session_textview))
                                     .setText(R.string.exit_session_text);
@@ -389,7 +389,6 @@ public class ChattingFragment extends Fragment {
 
                     }
                     chatLength++;
-                    Log.d(TAG, "onTick: "+chatLength);
                 }
 
                 @Override
@@ -574,7 +573,7 @@ public class ChattingFragment extends Fragment {
             if (resultCode == getActivity().RESULT_OK) {
                 uploadImage(result.getUri());
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(getActivity(), "Cropping failed Please try again ", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.cropping_failed, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -725,7 +724,7 @@ public class ChattingFragment extends Fragment {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+
                             }
                         });
                     }
@@ -817,11 +816,11 @@ public class ChattingFragment extends Fragment {
                         Log.d(TAG, "onDataChange: " + "isTeacherOnline "+isTeacherOnline);
                         if (isTeacherOnline != null && isTeacherOnline && session.getStudentOnline()) {
                             session.setTeacherOnline(true);
-                            teacherAvaibility.setText("Online");
+                            teacherAvaibility.setText(R.string.online_text);
                             startChatTimer();
                         } else {
                             session.setTeacherOnline(false);
-                            teacherAvaibility.setText("Offline");
+                            teacherAvaibility.setText(R.string.offline_text);
                             stopChatTimer();
                         }
                     }

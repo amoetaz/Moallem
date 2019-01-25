@@ -150,17 +150,17 @@ public class SignupFragment extends Fragment {
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 progressBar.setVisibility(View.GONE);
                                                                 if (task.isSuccessful()) {
-                                                                    Toast.makeText(getContext(), "Email has sent verify the email and try again ", Toast.LENGTH_LONG).show();
+                                                                    Toast.makeText(getContext(), R.string.verify_email_sent, Toast.LENGTH_LONG).show();
                                                                 }
                                                                 else {
-                                                                    Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                                    Toast.makeText(getContext(), R.string.wrong_message, Toast.LENGTH_SHORT).show();
                                                                 }
                                                             }
                                                         });
                                             }
                                         }
                                     } else {
-                                        Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), R.string.wrong_message, Toast.LENGTH_SHORT).show();
 
                                     }
                                 }
@@ -175,7 +175,7 @@ public class SignupFragment extends Fragment {
                                     initializeFirebasedatabaseVariables(emailStr);
                                     updateProfileAndLaunch(currentUser);
                                 }else {
-                                    Toast.makeText(getContext(), "Please verify your email", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(), R.string.verify_email_toast, Toast.LENGTH_LONG).show();
                                 }
                             }
                         }
@@ -187,7 +187,7 @@ public class SignupFragment extends Fragment {
             }
         }else {
             progressBar.setVisibility(View.GONE);
-            Toast.makeText(getActivity(), "Please enter valid data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.enter_valid_data, Toast.LENGTH_SHORT).show();
         }
 
     }

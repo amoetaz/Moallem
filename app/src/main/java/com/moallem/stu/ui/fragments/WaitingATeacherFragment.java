@@ -185,7 +185,7 @@ public class WaitingATeacherFragment extends Fragment {
                     progressBar.setVisibility(View.VISIBLE);
                     deleteSession();
                     deleteSession();
-                    Toast.makeText(getActivity(), "Question has been deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.question_deleted, Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                     return true;
 

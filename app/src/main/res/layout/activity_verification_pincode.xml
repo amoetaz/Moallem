@@ -26,7 +26,7 @@
         android:fontFamily="@font/roboto_regular"
         android:layout_centerHorizontal="true"
         android:textSize="30sp"
-        android:text="Verification Pin Code"
+        android:text="@string/verification_pin_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -43,7 +43,7 @@
     <TextView
         android:id="@+id/screen_subtitle"
         android:textSize="16sp"
-        android:text="Please write the pin code sent to"
+        android:text="@string/write_pincode_text"
         android:layout_marginTop="25dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/price_confirmation"
@@ -63,7 +63,7 @@
         android:textColor="@color/colorPrimary"
         android:id="@+id/resend_pincode"
         android:textSize="16sp"
-        android:text="Resend Pin Code?"
+        android:text="@string/resend_pin_code"
         android:layout_marginTop="5dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/screen_phonenumber"
