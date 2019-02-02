@@ -68,8 +68,8 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
     TextView price4;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    String PublicKey = "9Bmi9BAHwvTIB61hRHft";
-    String PrivateKey = "QPshyAvwS6HBrBCBNdqb";
+    String PublicKey = "EpR0dD4CWgFdU1Hvy29b";
+    String PrivateKey = "8F71tgPdTkBn6qtu5pug";
     String msisdn;
     private String itemPrice,itemAmount;
     private String [] operatorsCode,productCats,prices;
@@ -84,7 +84,7 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
         productCats = getProductCats();
         prices = getPrices();
         itemPrice = prices[0];
-        itemAmount = "10 Minutes";
+        itemAmount = radioQuantity1.getText().toString();
         initialzePrices(prices);
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this
                 , R.array.egyptOperatersName, android.R.layout.simple_spinner_item);
@@ -162,7 +162,7 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
     private void callApi() {
 
 
-        String OrderInfo = new RandomString(8, new Random()).nextString();
+        String OrderInfo = new RandomString(10, new Random()).nextString();
         String message = ProductCatalogName + productId + msisdn + operatorCode + OrderInfo;
         String signature = Utils.CalculateDigest(PublicKey, message, PrivateKey);
 
@@ -173,7 +173,7 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
         initRequest.setProductCatalogName(ProductCatalogName);
         initRequest.setProductId(productId);
         initRequest.setSignature(signature);
-        //initRequest.setLanguage("2");
+        //initRequest.setLanguage(1);
 
         apiService = ApiClient.getRetrofit().create(ApiService.class);
 
@@ -192,6 +192,7 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
                         intent.putExtra("transition", initTransition);
                         intent.putExtra("itemprice", itemPrice);
                         intent.putExtra("itemamount", itemAmount);
+
                         startActivity(intent);
 
                     } else if ((initTransition.getOperationStatusCode().equals("4"))) {
@@ -204,7 +205,6 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
                     Toast.makeText(PaymentActivity.this, R.string.wrong_msg_try_again, Toast.LENGTH_SHORT).show();
                 }
 
-                //Log.d(TAG, "onResponse: "+initTransition);
 
             }
 
@@ -252,30 +252,31 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
+            itemAmount = buttonView.getText().toString();
             if (buttonView == radioQuantity1) {
                 itemPrice = prices[0];
-                itemAmount = "10 Minutes";
+                //itemAmount = "10 Minutes";
                 productId = "10M_price";
                 radioQuantity1.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity2, radioQuantity3, radioQuantity4);
                 uncheckRadioButton(radioQuantity2, radioQuantity3, radioQuantity4);
             } else if (buttonView == radioQuantity2) {
                 itemPrice = prices[1];
-                itemAmount = "20 Minutes";
+                //itemAmount = "20 Minutes";
                 productId = "20M_price";
                 radioQuantity2.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity1, radioQuantity3, radioQuantity4);
                 uncheckRadioButton(radioQuantity1, radioQuantity3, radioQuantity4);
             } else if (buttonView == radioQuantity3) {
                 itemPrice = prices[2];
-                itemAmount = "30 Minutes";
+                //itemAmount = "30 Minutes";
                 productId = "30M_price";
                 radioQuantity3.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity1, radioQuantity2, radioQuantity4);
                 uncheckRadioButton(radioQuantity1, radioQuantity2, radioQuantity4);
             } else if (buttonView == radioQuantity4) {
                 itemPrice = prices[3];
-                itemAmount = "60 Minutes";
+                //itemAmount = "60 Minutes";
                 productId = "60M_price";
                 radioQuantity4.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity2, radioQuantity3, radioQuantity1);

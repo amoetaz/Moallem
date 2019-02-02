@@ -9,6 +9,4 @@
 /captures
 .externalNativeBuild
 *.dex
-*.jks
-/keystore.properties
 *.apk

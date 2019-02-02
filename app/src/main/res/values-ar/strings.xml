@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="deviceLangauge">arabic</string>
+    <string name="action_settings">الاعدادت</string>
+    <string name="wrong_message">خطأ ما حدث</string>
+    <string name="ok">حسنا</string>
+    <string name="cancel">إلغاء</string>
+    <string name="waiting_msg">من فضلك انتظر مدرس او اضغط زر الرجوع لحذف السؤال</string>
+    <string name="end_session_text">إنهاء</string>
+    <string name="exit_session_text">خروج</string>
+    <string name="edit_your_image_text">عدل في الصورة</string>
+    <string name="purchase_button">شراء</string>
+    <string name="check_internet_msg">من فضلك افحص الانترنت لديك</string>
+    <string name="valid_num_msg">من فضلك ادخل بيانات صحيحة</string>
+    <string name="enter_your_phone_number">ادخل رقم هاتفك</string>
+    <string name="_10_minutes">10 دقائق</string>
+    <string name="enough_for_1question">كافي لسؤال صعب</string>
+    <string name="_20_minutes">20 دقيقة</string>
+    <string name="_30_minutes">30 دقيقة</string>
+    <string name="_60_minutes">60 دقيقة</string>
+    <string name="congrate_msg">تهانينا! لقد تمت إضافة الدقائق لحسابك إبدأ بالتعلم الآن</string>
+    <string name="thanks_msg4using_maollem">شكرا لاستخدامك تطبيق معلم</string>
+    <string name="verification_pin_code">التحقق من الرقم السري</string>
+    <string name="write_pincode_text">من فضلك انسخ الرقم السري الذي ارسل الي</string>
+    <string name="resend_pin_code">إعادة إرسال الرقم السري؟</string>
+    <string name="online_text">متاح</string>
+    <string name="connect_text">تابع</string>
+    <string name="session_ended">السؤال انتهي</string>
+    <string name="speak_now">تحدث الآن</string>
+    <string name="enter_a_message">أدخل رسالة</string>
+    <string name="email_hint">الإيميل</string>
+    <string name="password_hint">الرقم السري</string>
+    <string name="login_textbotton">تسجيل الدخول</string>
+    <string name="weclome_to_moallem">مرحبا بك في تطبيق معلم</string>
+    <string name="sign_up_textbutton">عمل حساب</string>
+    <string name="already_have_acccont">لديك بالفعل حساب؟ ادخل الآن</string>
+    <string name="tell_moallems_what_you_need">أخبر معلمنا ماذا تريد</string>
+    <string name="done_buttontext">انتهيت!</string>
+    <string name="username_hint">إسم المستخدم</string>
+    <string name="education_hint">المستوي التعليمي</string>
+    <string name="sign_up_buttontext">استمر</string>
+    <string name="view_textbutton">مراجعة</string>
+    <string name="new_version_notifai">لقد تم تحديث التطبيق تحميل الآن؟</string>
+    <string name="alert_ok">حسنا</string>
+    <string name="alert_cancel">إلغاء</string>
+    <string name="alert_dont_show_again">عدم الظهور مرة أخري؟</string>
+    <string name="session_navigationdrawer">الاسئلة</string>
+    <string name="minutes_navigationdrawer">الدقائق</string>
+    <string name="signout_navigationdrawer">تسجيل الخروج</string>
+    <string name="make_sure_sim_insered">من فضلك تأكد من أن الشريحه موجودة</string>
+    <string name="this_section_not_allowed">هذا القسم غير متاح في بلدك حاليا</string>
+    <string name="wrong_msg_try_again">حدث خطأ ما جرب مرة أخري</string>
+    <string name="dont_have_credit">ليس لديك رصيد كاقي للشراء</string>
+    <string name="pin_sent_toast">لقد تم ارسال الرقم السري</string>
+    <string name="invalid_pincode_toast">الرقم السري غير صحيح</string>
+    <string name="alert_sure_to_end_question">هل أنت متأكد من إنهاء السؤال؟</string>
+    <string name="balance_lessthan1minutes_toast">رصيدك الآن اقل من دقيقة</string>
+    <string name="cropping_failed">لقد فشل القص</string>
+    <string name="offline_text">غير متاح</string>
+    <string name="enter_valid_data">من فضلك ادخل بيانات صحيحة</string>
+    <string name="question_posted">لقد تم رفع السؤال</string>
+    <string name="verify_email_sent">لقد تم ارسال ايميل التحقق</string>
+    <string name="verify_email_toast">من فضلك تفحص ايميل التحقق</string>
+    <string name="question_deleted">لقد تم حذف السؤال</string>
+    <string name="exceeding_number_of_Sending_pincode">لقد تعديت عدد مرات ارسال الرقم السري</string>
+
+    <string-array name="egyptOperatersName">
+        <item>أورانج</item>
+        <item>فودافون</item>
+        <item>إتصالات</item>
+    </string-array>
+
+    <string-array name="egyptPrices">
+        <item>3.99 جنيه مصري</item>
+        <item>6.99 جنيه مصري</item>
+        <item>11.99 جنيه مصري</item>
+        <item>23.99 جنيه مصري</item>
+    </string-array>
+</resources>

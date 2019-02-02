@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String BaseUrl = "http://staging.tpay.me/api/TPay.svc/json/";
+    public static final String BaseUrl = "http://live.tpay.me/api/TPay.svc/json/";
     public static Retrofit retrofit = null;
 
     public static Retrofit getRetrofit(){

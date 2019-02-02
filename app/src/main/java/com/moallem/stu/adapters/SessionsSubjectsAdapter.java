@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.moallem.stu.R;
 import com.moallem.stu.models.Subject;
 import com.moallem.stu.ui.fragments.SessionsFragment;
+import com.moallem.stu.utilities.Utils;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,11 @@ public class SessionsSubjectsAdapter extends RecyclerView.Adapter<SessionsSubjec
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Subject subect = subjects.get(position);
-        holder.nameTxt.setText(subect.getName());
+        if (Utils.getDeviceLanguage(context).equals("arabic")) {
+            holder.nameTxt.setText(subect.getArabicName());
+        }else {
+            holder.nameTxt.setText(subect.getName());
+        }
         Glide.with(context).load(subect.getImage()).into(holder.img);
         if (isBigBox(position))
             holder.itemView.getLayoutParams().height = (int) context.getResources().getDimension(R.dimen.itemview_height1);

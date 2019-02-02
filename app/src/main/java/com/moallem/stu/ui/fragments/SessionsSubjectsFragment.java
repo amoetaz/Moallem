@@ -19,12 +19,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
-
 import com.moallem.stu.R;
 import com.moallem.stu.adapters.SessionsSubjectsAdapter;
 import com.moallem.stu.models.Subject;
+
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -82,9 +82,11 @@ public class SessionsSubjectsFragment extends Fragment {
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                         String subjectName = dataSnapshot.child("name").getValue(String.class);
                         String subjectIconUrl = dataSnapshot.child("subIcon").getValue(String.class);
+                        String arabicName = dataSnapshot.child("arabicName").getValue(String.class);
                         String key = dataSnapshot.getKey();
                         Subject subject = new Subject();
 
+                        subject.setArabicName(arabicName);
                         subject.setName(subjectName);
                         subject.setImage(subjectIconUrl);
                         subject.setKey(key);

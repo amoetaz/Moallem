@@ -71,6 +71,8 @@ public class VerificationPincodeActivity extends AppCompatActivity {
     String itemPrice , itemAmount;
     int counter = 0;
     private static final String COUNTER_KEY = "counter";
+    String publicKey = "EpR0dD4CWgFdU1Hvy29b";
+    String privateKey = "8F71tgPdTkBn6qtu5pug";
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -114,11 +116,11 @@ public class VerificationPincodeActivity extends AppCompatActivity {
                         preventInteracting();
                     } else {
                         Toast.makeText(VerificationPincodeActivity.this,
-                                "Check Internet Connection", Toast.LENGTH_SHORT).show();
+                                R.string.check_internet_msg, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(VerificationPincodeActivity.this,
-                            "You exceeded maximum number of sending pin code", Toast.LENGTH_SHORT).show();
+                            R.string.exceeding_number_of_Sending_pincode, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -126,16 +128,16 @@ public class VerificationPincodeActivity extends AppCompatActivity {
     }
 
     private void setPriceConfirmation() {
+        String s1 = "سوف تشتري ";
+        String s2 = " بسعر ";
         if (Utils.getDeviceLanguage(this).equals("arabic")) {
-            priceConfirmation.setText(itemPrice+"بسعر "+itemAmount+"سوف تشتري ");
+            priceConfirmation.setText(s1+itemAmount+s2+itemPrice);
         } else {
             priceConfirmation.setText("You will perchase "+itemAmount+" for "+itemPrice);
         }
     }
 
     private void resendPincode() {
-        String publicKey = "9Bmi9BAHwvTIB61hRHft";
-        String privateKey = "QPshyAvwS6HBrBCBNdqb";
 
         String message = initTransition.getTransactionId() ;
         String sig = Utils.CalculateDigest(publicKey, message, privateKey);
@@ -192,8 +194,6 @@ public class VerificationPincodeActivity extends AppCompatActivity {
 
     private void verifyCode() {
 
-        String publicKey = "9Bmi9BAHwvTIB61hRHft";
-        String privateKey = "QPshyAvwS6HBrBCBNdqb";
         String pinCode = pin1.getText().toString() + pin2.getText().toString() +
                 pin3.getText().toString() + pin4.getText().toString() + pin5.getText().toString()
                 + pin6.getText().toString();
