@@ -64,6 +64,11 @@
     <string name="verify_email_toast">من فضلك تفحص ايميل التحقق</string>
     <string name="question_deleted">لقد تم حذف السؤال</string>
     <string name="exceeding_number_of_Sending_pincode">لقد تعديت عدد مرات ارسال الرقم السري</string>
+    <string name="done_take_photo">تم</string>
+    <string name="failed_send_msg">فشل الإرسال</string>
+    <string name="sending_toast">إرسال …</string>
+    <string name="press_mic_and_release">إضغط زر الميكرفون ثم إرفع إصبعك عند الإنتهاء</string>
+    <string name="permissions_denied">تم رفض الأذونات</string>
 
     <string-array name="egyptOperatersName">
         <item>أورانج</item>

@@ -8,17 +8,12 @@ public class PrefsHelper {
     private SharedPreferences mPrefs;
     private static PrefsHelper sInstance = null;
 
-    private static final String KEY_isTeacher = "key_is_Teacher";
-    private boolean isTeacher;
-
     private static final String KEY_showDialog = "key_showDialog";
     private boolean showDialog;
 
     private static final String KEY_counterToshowDialog = "key_counter";
     private int counterToshowDialog = 0;
 
-    private static final String KEY_isMessagesInfoHasData = "key_isMessagesInfo_Has_Data";
-    private boolean isMessagesInfoHasData;
 
     private static final String KEY_userType = "key_userType";
     private String userType;
@@ -72,29 +67,6 @@ public class PrefsHelper {
     }
 
 
-    public void setisMessagesInfoHasData(boolean isMessagesInfoHasData) {
-        this.isMessagesInfoHasData = isMessagesInfoHasData;
-        mPrefs.edit().putBoolean(KEY_isMessagesInfoHasData, isMessagesInfoHasData).apply();
-
-    }
-
-    public boolean isMessagesInfoHasData() {
-        isMessagesInfoHasData = mPrefs.getBoolean(KEY_isMessagesInfoHasData, false);
-        return isMessagesInfoHasData;
-    }
-
-
-    public void setisTeacherMode(boolean isTeacher) {
-        this.isTeacher = isTeacher;
-        mPrefs.edit().putBoolean(KEY_isTeacher, isTeacher).apply();
-
-    }
-
-    public boolean getisTeacherMode() {
-        isTeacher = mPrefs.getBoolean(KEY_isTeacher, false);
-        return isTeacher;
-    }
-
     public void setUserType(String userType) {
         this.userType = userType;
         mPrefs.edit().putString(KEY_userType,userType).apply();
@@ -118,12 +90,8 @@ public class PrefsHelper {
     }
 
 
-
-
     public void destroy() {
         mPrefs.edit().clear().apply();
-        isTeacher = false;
-        isMessagesInfoHasData = false;
         userType = null;
 
     }

@@ -249,13 +249,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
                 preparedPlayer.start();
                 initializeHandler(seekBar);
                 seekBar.setMax(mPlayer.getDuration()/1000);
-                Log.d(TAG, "startPlaying: duration "+mPlayer.getDuration()/1000);
 
             });
 
-
         } catch (IOException e) {
-            Log.e(TAG, "prepare() failed");
         }
         mPlayer.setOnCompletionListener(mp ->{
             v.setTag("play");

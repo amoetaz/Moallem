@@ -19,7 +19,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -148,7 +147,7 @@ public class ChattingFragment extends Fragment {
             sendAudio.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getActivity(), "permissions denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.permissions_denied, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -222,9 +221,9 @@ public class ChattingFragment extends Fragment {
 
                     if (downTime > 1500){
                         uploadAudio();
-                        Toast.makeText(getContext(), "sending ...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.sending_toast, Toast.LENGTH_SHORT).show();
                     } else
-                        Toast.makeText(getContext(), "Press mic icon then release when finish", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.press_mic_and_release, Toast.LENGTH_SHORT).show();
                 }
                 return false;
             }
@@ -275,7 +274,7 @@ public class ChattingFragment extends Fragment {
     }
 
     private void listenToSessionEnded() {
-        valueEventListener = reference.child("subjects").child(session.getQuestionType().toLowerCase())
+        valueEventListener = reference.child(SUBJECTS_NODE).child(session.getQuestionType().toLowerCase())
                 .child(QUESTIONIDS_NODES)
                 .child(session.getKey()).child(ISFINISHED_NODE)
                 .addValueEventListener(new ValueEventListener() {
@@ -299,7 +298,7 @@ public class ChattingFragment extends Fragment {
     }
 
     private void listenToIfStudentReachedZeroMins() {
-        valueEventListener = reference.child("subjects").child(session.getQuestionType().toLowerCase())
+        valueEventListener = reference.child(SUBJECTS_NODE).child(session.getQuestionType().toLowerCase())
                 .child(QUESTIONIDS_NODES)
                 .child(session.getKey()).child(ISSTUDENTREACHERZERO_NODE)
                 .addValueEventListener(new ValueEventListener() {
@@ -545,7 +544,7 @@ public class ChattingFragment extends Fragment {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.failed_send_msg, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -557,7 +556,7 @@ public class ChattingFragment extends Fragment {
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setActivityTitle(getString(R.string.edit_your_image_text))
                     .setCropShape(CropImageView.CropShape.RECTANGLE)
-                    .setCropMenuCropButtonTitle("Done")
+                    .setCropMenuCropButtonTitle(getString(R.string.done_take_photo))
                     .setRequestedSize(400, 400)
                     .setCropMenuCropButtonIcon(R.drawable.ic_done)
                     .start(getContext(),this);
@@ -619,7 +618,7 @@ public class ChattingFragment extends Fragment {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), R.string.wrong_message, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -771,7 +770,7 @@ public class ChattingFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        reference.child("subjects").child(session.getQuestionType().toLowerCase()).child(QUESTIONIDS_NODES)
+        reference.child(SUBJECTS_NODE).child(session.getQuestionType().toLowerCase()).child(QUESTIONIDS_NODES)
                 .child(session.getKey()).child("isStudentOnline").setValue(false);
         session.setStudentOnline(false);
         stopChatTimer();
@@ -780,12 +779,12 @@ public class ChattingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        reference.child("subjects").child(session.getQuestionType().toLowerCase()).child(QUESTIONIDS_NODES)
+        reference.child(SUBJECTS_NODE).child(session.getQuestionType().toLowerCase()).child(QUESTIONIDS_NODES)
                 .child(session.getKey()).child("isStudentOnline").setValue(true);
         session.setStudentOnline(true);
 
         if (!session.getFinished() && !session.getStudentReachedZeroMins()) {
-            reference.child("subjects").child(session.getQuestionType().toLowerCase()).child(QUESTIONIDS_NODES)
+            reference.child(SUBJECTS_NODE).child(session.getQuestionType().toLowerCase()).child(QUESTIONIDS_NODES)
                     .child(session.getKey()).child("isTeacherOnline")
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -813,7 +812,6 @@ public class ChattingFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Boolean isTeacherOnline = dataSnapshot.getValue(Boolean.class);
-                        Log.d(TAG, "onDataChange: " + "isTeacherOnline "+isTeacherOnline);
                         if (isTeacherOnline != null && isTeacherOnline && session.getStudentOnline()) {
                             session.setTeacherOnline(true);
                             teacherAvaibility.setText(R.string.online_text);
@@ -838,7 +836,7 @@ public class ChattingFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         if (teacherStatusEventListener != null){
-            reference.child("subjects").child(session.getQuestionType().toLowerCase()).child(QUESTIONIDS_NODES)
+            reference.child(SUBJECTS_NODE).child(session.getQuestionType().toLowerCase()).child(QUESTIONIDS_NODES)
                     .child(session.getKey()).child("isTeacherOnline").removeEventListener(teacherStatusEventListener);
         }
 

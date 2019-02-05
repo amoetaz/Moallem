@@ -80,9 +80,7 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
         setContentView(R.layout.activity_payment);
         ButterKnife.bind(this);
 
-        operatorsCode = getOperatorsCode();
-        productCats = getProductCats();
-        prices = getPrices();
+        getCountryValues();
         itemPrice = prices[0];
         itemAmount = radioQuantity1.getText().toString();
         initialzePrices(prices);
@@ -111,7 +109,7 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
             @Override
             public void onClick(View v) {
                 if (Utils.isNetworkConnected(getApplicationContext())) {
-                    msisdn = getPhoneNumber(userPhoneNumber.getText().toString());
+                    msisdn = getFullPhoneNumber(userPhoneNumber.getText().toString());
                     if (MsisdnRegex.isValidMsisdn(msisdn)) {
                         callApi();
                         progressBar.setVisibility(View.VISIBLE);
@@ -127,11 +125,15 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
 
     }
 
-    private String[] getPrices() {
+    private void getCountryValues() {
         if (PrefsHelper.getInstance(this).getCountryCode().toLowerCase().equals("eg")) {
-            return getResources().getStringArray(R.array.egyptPrices);
+            prices =  getResources().getStringArray(R.array.egyptPrices);
+            productCats = getResources().getStringArray(R.array.egyptProductCats);
+            operatorsCode = getResources().getStringArray(R.array.egyptOperatersCode);
         } else {
-            return getResources().getStringArray(R.array.egyptPrices);
+            prices =  getResources().getStringArray(R.array.egyptPrices);
+            productCats = getResources().getStringArray(R.array.egyptProductCats);
+            operatorsCode = getResources().getStringArray(R.array.egyptOperatersCode);
         }
     }
 
@@ -142,22 +144,6 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
         price4.setText(prices[3]);
     }
 
-    private String[] getProductCats() {
-        if (PrefsHelper.getInstance(this).getCountryCode().toLowerCase().equals("eg")) {
-            return getResources().getStringArray(R.array.egyptProductCats);
-        } else {
-            return getResources().getStringArray(R.array.egyptProductCats);
-        }
-    }
-
-    private String[] getOperatorsCode() {
-        if (PrefsHelper.getInstance(this).getCountryCode().toLowerCase().equals("eg")) {
-            return getResources().getStringArray(R.array.egyptOperatersCode);
-        } else {
-            return getResources().getStringArray(R.array.egyptOperatersCode);
-        }
-
-    }
 
     private void callApi() {
 
@@ -218,7 +204,7 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
 
     }
 
-    private String getPhoneNumber(String s) {
+    private String getFullPhoneNumber(String s) {
         String countryCode = getCountryCode();
 
         if (countryCode.equals("2")){
@@ -255,28 +241,24 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
             itemAmount = buttonView.getText().toString();
             if (buttonView == radioQuantity1) {
                 itemPrice = prices[0];
-                //itemAmount = "10 Minutes";
                 productId = "10M_price";
                 radioQuantity1.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity2, radioQuantity3, radioQuantity4);
                 uncheckRadioButton(radioQuantity2, radioQuantity3, radioQuantity4);
             } else if (buttonView == radioQuantity2) {
                 itemPrice = prices[1];
-                //itemAmount = "20 Minutes";
                 productId = "20M_price";
                 radioQuantity2.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity1, radioQuantity3, radioQuantity4);
                 uncheckRadioButton(radioQuantity1, radioQuantity3, radioQuantity4);
             } else if (buttonView == radioQuantity3) {
                 itemPrice = prices[2];
-                //itemAmount = "30 Minutes";
                 productId = "30M_price";
                 radioQuantity3.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity1, radioQuantity2, radioQuantity4);
                 uncheckRadioButton(radioQuantity1, radioQuantity2, radioQuantity4);
             } else if (buttonView == radioQuantity4) {
                 itemPrice = prices[3];
-                //itemAmount = "60 Minutes";
                 productId = "60M_price";
                 radioQuantity4.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity2, radioQuantity3, radioQuantity1);

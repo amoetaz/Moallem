@@ -21,7 +21,7 @@
     <string name="exit_session_text">Exit</string>
     <string name="edit_your_image_text" >Edit your image</string>
     <string name="purchase_button">Purchase</string>
-    <string name="check_internet_msg">Please check Internet Connetection</string>
+    <string name="check_internet_msg">Please check Internet Connection</string>
     <string name="valid_num_msg">Please enter valid number</string>
     <string name="enter_your_phone_number">Enter your phone number</string>
     <string name="_10_minutes">10 minutes</string>
@@ -74,14 +74,11 @@
     <string name="verify_email_toast">Please verify your email</string>
     <string name="question_deleted">Question has been deleted</string>
     <string name="exceeding_number_of_Sending_pincode">You exceeded maximum number of sending pin code</string>
-
-    <string-array name="choices" translatable="false">
-        <item>Egypt</item>
-        <item>Suadia arabia</item>
-        <item>Qatar</item>
-        <item>Baheren</item>
-    </string-array>
-
+    <string name="done_take_photo">Done</string>
+    <string name="failed_send_msg">Failed</string>
+    <string name="sending_toast">Sending …</string>
+    <string name="press_mic_and_release">Press mic icon then release when finish</string>
+    <string name="permissions_denied">permissions denied</string>
 
     <string-array name="egyptOperatersCode" translatable="false">
         <item>60201</item>
