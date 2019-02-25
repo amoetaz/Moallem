@@ -15,7 +15,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
@@ -171,8 +173,11 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
                 .withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.app_title_color))
                 .withIdentifier(2).withName(R.string.minutes_navigationdrawer);
 
-        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIcon(R.drawable.ic_signout)
-                .withIdentifier(3).withName(R.string.signout_navigationdrawer);
+        PrimaryDrawerItem item4 = new PrimaryDrawerItem().withIcon(R.drawable.ic_signout)
+                .withIdentifier(4).withName(R.string.signout_navigationdrawer);
+
+        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIcon(R.drawable.ic_free_minutes)
+                .withIdentifier(3).withName("Free Minutes");
 
 
         AccountHeader header = new AccountHeaderBuilder()
@@ -195,7 +200,7 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
                 .withToolbar(toolbar)
                 .withAccountHeader(header)
                 .addDrawerItems(
-                        item1, item2,item3
+                        item1, item2,item3,item4
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -204,8 +209,12 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
                             case 1:drawer.closeDrawer();startActivity(new Intent(MainActivity.this
                                     ,SessionsActivity.class)); break;
                             case 2:drawer.closeDrawer();
-                                startPaymentActivity(); break;
-                            case 3:logout();break;
+                                startPaymentActivity();
+                                break;
+                            case 3:drawer.closeDrawer();
+                                freeMinutesDialog();
+                                break;
+                            case 4:logout();break;
                             default:break;
                         }
                          return true;
@@ -213,6 +222,26 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
                 })
                  .withDrawerGravity(GravityCompat.START)
                 .build();
+    }
+
+    private void freeMinutesDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+        View mView = inflater.inflate(R.layout.free_minutes_dialog, null);
+        builder.setView(mView);
+        ImageView cancel = mView.findViewById(R.id.image_cancel);
+
+
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation_2;
+        dialog.show();
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     private void startPaymentActivity() {

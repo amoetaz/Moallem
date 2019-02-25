@@ -168,6 +168,16 @@
 
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/promocode_text"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="23sp"
+            android:layout_gravity="center"
+            android:text="Have a Promocode?"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
         <Button
             android:id="@+id/payment_button"
             android:textSize="20sp"

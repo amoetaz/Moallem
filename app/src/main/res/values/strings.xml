@@ -79,6 +79,7 @@
     <string name="sending_toast">Sending …</string>
     <string name="press_mic_and_release">Press mic icon then release when finish</string>
     <string name="permissions_denied">permissions denied</string>
+    <string name="get50off" translatable="false">Get 50% off from your upcoming session when your friend use Moallem\n\nRefer NOW!</string>
 
     <string-array name="egyptOperatersCode" translatable="false">
         <item>60201</item>

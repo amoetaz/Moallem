@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/opt/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_check_circle_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/opt/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_card_giftcard_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -33,9 +33,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_payment_done" />
+                                      <entry key="outputName" value="ic_free_minutes" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="3aaf44" />
+                                      <entry key="themeColor" value="acafb3" />
                                     </map>
                                   </option>
                                 </PersistentState>

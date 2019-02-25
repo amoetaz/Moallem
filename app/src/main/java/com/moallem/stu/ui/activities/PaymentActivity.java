@@ -1,8 +1,11 @@
 package com.moallem.stu.ui.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -66,6 +69,8 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
     TextView price3;
     @BindView(R.id.price4)
     TextView price4;
+    @BindView(R.id.promocode_text)
+    TextView promocodeText;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     String PublicKey = "EpR0dD4CWgFdU1Hvy29b";
@@ -100,6 +105,14 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
 
             }
         });
+
+        promocodeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setPromocodeDialog();
+            }
+        });
+
         radioQuantity1.setOnCheckedChangeListener(this);
         radioQuantity2.setOnCheckedChangeListener(this);
         radioQuantity3.setOnCheckedChangeListener(this);
@@ -123,6 +136,36 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
             }
         });
 
+    }
+
+    private void setPromocodeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(
+                PaymentActivity.this);
+        // Get the layout inflater
+        LayoutInflater inflater = PaymentActivity.this.getLayoutInflater();
+        View mView = inflater.inflate(R.layout.custom_promocode_dialog, null);
+        final EditText promocode = (EditText)mView.findViewById(R.id.promocode);
+        builder.setView(mView)
+                .setPositiveButton("Ok",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+
+                               String promocodeValue = promocode.getText().toString();
+                                Toast.makeText(PaymentActivity.this, promocodeValue, Toast.LENGTH_SHORT).show();
+
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void getCountryValues() {
