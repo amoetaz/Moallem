@@ -6,26 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.moallem.stu.R;
 import com.moallem.stu.models.Subject;
 import com.moallem.stu.utilities.Utils;
 
 import java.util.ArrayList;
 
-import static com.moallem.stu.utilities.FirebaseConstants.ISFINISHED_NODE;
-import static com.moallem.stu.utilities.FirebaseConstants.QUESTIONIDS_NODES;
-import static com.moallem.stu.utilities.FirebaseConstants.SUBJECTS_NODE;
-
-public class SampleRecyclerViewAdapter extends RecyclerView.Adapter<SampleViewHolders>
-{
+public class SampleRecyclerViewAdapter extends RecyclerView.Adapter<SampleViewHolders> {
     private Context context;
     private ArrayList<Subject> subjects;
     private OnItemClicked onClick;
@@ -42,8 +31,8 @@ public class SampleRecyclerViewAdapter extends RecyclerView.Adapter<SampleViewHo
     @NonNull
     @Override
     public SampleViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.content_main,parent,false);
-        SampleViewHolders holder=new SampleViewHolders(v);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_main, parent, false);
+        SampleViewHolders holder = new SampleViewHolders(v);
         return holder;
     }
 
@@ -52,12 +41,12 @@ public class SampleRecyclerViewAdapter extends RecyclerView.Adapter<SampleViewHo
         Subject subect = subjects.get(position);
         if (Utils.getDeviceLanguage(context).equals("arabic")) {
             holder.nameTxt.setText(subect.getArabicName());
-        }else {
+        } else {
             holder.nameTxt.setText(subect.getName());
         }
         Glide.with(context).load(subect.getImage()).into(holder.img);
         if (isBigBox(position))
-        holder.itemView.getLayoutParams().height = (int) context.getResources().getDimension(R.dimen.itemview_height1);
+            holder.itemView.getLayoutParams().height = (int) context.getResources().getDimension(R.dimen.itemview_height1);
         else
             holder.itemView.getLayoutParams().height = (int) context.getResources().getDimension(R.dimen.itemview_height2);
 
@@ -74,14 +63,13 @@ public class SampleRecyclerViewAdapter extends RecyclerView.Adapter<SampleViewHo
         return subjects.size();
     }
 
-    private boolean isBigBox(int position){
+    private boolean isBigBox(int position) {
         return position % 2 != 0;
     }
 
 
-    public void setOnClick(OnItemClicked onClick)
-    {
-        this.onClick=onClick;
+    public void setOnClick(OnItemClicked onClick) {
+        this.onClick = onClick;
     }
 
 }

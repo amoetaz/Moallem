@@ -119,7 +119,7 @@
         android:gravity="center"
         android:background="@drawable/phone_field_style"
         android:theme="@style/TextLabel"
-        android:id="@+id/user_phonenumber"
+        android:id="@+id/promocode_field"
         android:layout_width="210dp"
         android:layout_height="45dp"
         android:inputType="text"

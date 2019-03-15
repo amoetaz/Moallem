@@ -15,9 +15,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
@@ -30,6 +34,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -59,11 +64,12 @@ import butterknife.Unbinder;
 
 import static com.moallem.stu.utilities.FirebaseConstants.ISTHEREUNFINISHEDSESSION;
 import static com.moallem.stu.utilities.FirebaseConstants.SUBJECTS_NODE;
+import static com.moallem.stu.utilities.FirebaseConstants.USEDPROMOCODEIDsUSERS;
 import static com.moallem.stu.utilities.FirebaseConstants.USERINFO_NODE;
 
-public class MainActivity extends AppCompatActivity  implements SampleRecyclerViewAdapter.OnItemClicked {
+public class MainActivity extends AppCompatActivity implements SampleRecyclerViewAdapter.OnItemClicked {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "MainActivityc";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
 
         if (Utils.isNetworkConnected(getApplicationContext())) {
             initList();
-        }else {
+        } else {
             Toast.makeText(this, R.string.check_internet_msg, Toast.LENGTH_SHORT).show();
         }
 
@@ -114,7 +120,7 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
 
     private void getCountryName() {
         try {
-            TelephonyManager tm = (TelephonyManager)this.getSystemService(this.TELEPHONY_SERVICE);
+            TelephonyManager tm = (TelephonyManager) this.getSystemService(this.TELEPHONY_SERVICE);
             if (tm != null) {
                 String countryCodeValue = tm.getNetworkCountryIso();
                 PrefsHelper.getInstance(this).setCountryCode(countryCodeValue);
@@ -129,39 +135,39 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
         Intent webintent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
         try {
             startActivity(appintent);
-        } catch (ActivityNotFoundException anfe ) {
+        } catch (ActivityNotFoundException anfe) {
             startActivity(webintent);
         }
 
     }
 
-    private void showConfirmDialogForUpdate(){
+    private void showConfirmDialogForUpdate() {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.new_version_notifai);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.new_version_notifai);
 
-            builder.setPositiveButton(R.string.alert_ok, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    openApplink();
+        builder.setPositiveButton(R.string.alert_ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                openApplink();
 
-                }
-            });
-            builder.setNegativeButton(R.string.alert_cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // User cancelled the dialog
-                }
-            });
+            }
+        });
+        builder.setNegativeButton(R.string.alert_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
 
-            builder.setNeutralButton(R.string.alert_dont_show_again, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(MainActivity.this, ""+which, Toast.LENGTH_SHORT).show();
-                    PrefsHelper.getInstance(getApplicationContext()).setShowDialog(false);
-                }
-            });
+        builder.setNeutralButton(R.string.alert_dont_show_again, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(MainActivity.this, "" + which, Toast.LENGTH_SHORT).show();
+                PrefsHelper.getInstance(getApplicationContext()).setShowDialog(false);
+            }
+        });
 
-            AlertDialog dialog = builder.create();
-            dialog.show();
+        AlertDialog dialog = builder.create();
+        dialog.show();
 
     }
 
@@ -177,7 +183,7 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
                 .withIdentifier(4).withName(R.string.signout_navigationdrawer);
 
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIcon(R.drawable.ic_free_minutes)
-                .withIdentifier(3).withName("Free Minutes");
+                .withIdentifier(3).withName(R.string.free_minutes);
 
 
         AccountHeader header = new AccountHeaderBuilder()
@@ -195,51 +201,168 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
                 })
                 .build();
 
-         drawer = new DrawerBuilder()
+        drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(header)
                 .addDrawerItems(
-                        item1, item2,item3,item4
+                        item1, item2, item3, item4
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        switch (position){
-                            case 1:drawer.closeDrawer();startActivity(new Intent(MainActivity.this
-                                    ,SessionsActivity.class)); break;
-                            case 2:drawer.closeDrawer();
+                        switch (position) {
+                            case 1:
+                                drawer.closeDrawer();
+                                startActivity(new Intent(MainActivity.this
+                                        , SessionsActivity.class));
+                                break;
+                            case 2:
+                                drawer.closeDrawer();
                                 startPaymentActivity();
                                 break;
-                            case 3:drawer.closeDrawer();
+                            case 3:
+                                drawer.closeDrawer();
                                 freeMinutesDialog();
                                 break;
-                            case 4:logout();break;
-                            default:break;
+                            case 4:
+                                logout();
+                                break;
+                            default:
+                                break;
                         }
-                         return true;
+                        return true;
                     }
                 })
-                 .withDrawerGravity(GravityCompat.START)
+                .withDrawerGravity(GravityCompat.START)
                 .build();
     }
 
-    private void freeMinutesDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+    private void freeMinutesDialog() {
+        String promocode = String.format("moallem%s", Utils.getCurrentUserId().substring(0, 8));
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         LayoutInflater inflater = MainActivity.this.getLayoutInflater();
         View mView = inflater.inflate(R.layout.free_minutes_dialog, null);
+
         builder.setView(mView);
         ImageView cancel = mView.findViewById(R.id.image_cancel);
+        Button button = (Button) mView.findViewById(R.id.submit_button);
+        TextView codeToCopy = mView.findViewById(R.id.code_to_copy);
+        EditText promocodeField = mView.findViewById(R.id.promocode_field);
 
+        codeToCopy.setText(promocode);
+        promocodeField.setText(promocode);
 
         AlertDialog dialog = builder.create();
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation_2;
         dialog.show();
-
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkPromoCodeValidility(promocodeField.getText().toString());
+            }
+        });
+
+
+    }
+
+    /*private void adjustDialog(AlertDialog dialog) {
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = 500;
+        params.gravity = Gravity.TOP;
+        window.setAttributes(params);
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE );
+
+    }
+*/
+    private void checkPromoCodeValidility(String promocode) {
+        String subId = promocode.replace("moallem", "");
+        Toast.makeText(this, subId, Toast.LENGTH_SHORT).show();
+        Query query = mDatabase.child(USERINFO_NODE).orderByKey().startAt(subId).limitToFirst(1);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    //get the id which start with given substring
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                        Log.d(TAG, "onDataChange: " + dataSnapshot1.getKey());
+                        checkIfPromocodeUsedBefore(dataSnapshot1.getKey());
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void checkIfPromocodeUsedBefore(String userId) {
+        mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId())
+                .child(USEDPROMOCODEIDsUSERS).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    boolean isUserFound = false;
+                    String userids = dataSnapshot.getValue(String.class);
+                    if (userids != null) {
+                        String[] usersidsArr = userids.split(",");
+                        for (String user : usersidsArr) {
+                            if (user.equals(userId)) {
+                                isUserFound = true;
+                                break;
+                            }
+                        }
+                        if (isUserFound) {
+                            Toast.makeText(MainActivity.this, "Sorry you have used this promocode before"
+                                    , Toast.LENGTH_SHORT).show();
+                        } else {
+                            mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId())
+                                    .child(USEDPROMOCODEIDsUSERS).setValue(userids + "," + userId);
+                            addUserIdToPromocodeFriendList(Utils.getCurrentUserId());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void addUserIdToPromocodeFriendList(String id) {
+        mDatabase.child(USERINFO_NODE).child(id)
+                .child(USEDPROMOCODEIDsUSERS).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+
+                    String userids = dataSnapshot.getValue(String.class);
+                    if (userids != null) {
+                        mDatabase.child(USERINFO_NODE).child(id)
+                                .child(USEDPROMOCODEIDsUSERS).setValue(userids + ",");
+                        addUserIdToPromocodeFriendList(Utils.getCurrentUserId());
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
@@ -248,10 +371,10 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
         String countryCode = PrefsHelper.getInstance(this).getCountryCode();
         if (countryCode == null || countryCode.equals("none")) {
             Toast.makeText(this, R.string.make_sure_sim_insered, Toast.LENGTH_SHORT).show();
-        }else if (fromAllowedCounteries(countryCode)){
+        } else if (fromAllowedCounteries(countryCode)) {
             startActivity(new Intent(MainActivity.this
-                    ,PaymentActivity.class));
-        }else {
+                    , PaymentActivity.class));
+        } else {
             Toast.makeText(this, R.string.this_section_not_allowed, Toast.LENGTH_SHORT).show();
         }
     }
@@ -266,10 +389,10 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
                 .child("timeBalance").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     Double balance = dataSnapshot.getValue(Double.class);
-                    if (balance != null){
-                        drawer.updateBadge(2,new StringHolder((balance/60)+""));
+                    if (balance != null) {
+                        drawer.updateBadge(2, new StringHolder((balance / 60) + ""));
                     }
                 }
             }
@@ -281,19 +404,19 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
         });
     }
 
-    private void checkForNewVersion(){
+    private void checkForNewVersion() {
         mDatabase.child("versionsUpdateNotify").child("studentApp")
-                .child("isVersion1-0Updated").addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("isVersion1-0-2Updated").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     Boolean isUpdated = dataSnapshot.getValue(Boolean.class);
-                    if (isUpdated != null && isUpdated){
-                        if (PrefsHelper.getInstance(getApplicationContext()).getShowDialog()){
-                            if (PrefsHelper.getInstance(getApplicationContext()).getCounterToshowDialog() == 10){
+                    if (isUpdated != null && isUpdated) {
+                        if (PrefsHelper.getInstance(getApplicationContext()).getShowDialog()) {
+                            if (PrefsHelper.getInstance(getApplicationContext()).getCounterToshowDialog() == 10) {
                                 showConfirmDialogForUpdate();
                                 PrefsHelper.getInstance(getApplicationContext()).resetCounterToshowDialog();
-                            }else {
+                            } else {
                                 PrefsHelper.getInstance(getApplicationContext()).incremntCounterToshowDialog();
                             }
                         }
@@ -309,7 +432,7 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
     }
 
     private void checkIfUserNotLogin() {
-        if (firebaseAuth.getCurrentUser() == null){
+        if (firebaseAuth.getCurrentUser() == null) {
             startActivity(new Intent(this, RegisteringActivity.class));
             finish();
         }
@@ -317,7 +440,7 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
 
     private void initList() {
 
-        rcAdapter = new SampleRecyclerViewAdapter(getApplicationContext(),sList);
+        rcAdapter = new SampleRecyclerViewAdapter(getApplicationContext(), sList);
         recyclerView.setAdapter(rcAdapter);
         rcAdapter.setOnClick(MainActivity.this);
 
@@ -325,7 +448,7 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
 
-                if (checkIfNodesExists(dataSnapshot,"name","subIcon","arabicName")) {
+                if (checkIfNodesExists(dataSnapshot, "name", "subIcon", "arabicName")) {
                     String subjectName = dataSnapshot.child("name").getValue(String.class);
                     String subjectIconUrl = dataSnapshot.child("subIcon").getValue(String.class);
                     String key = dataSnapshot.getKey();
@@ -363,9 +486,11 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
         };
         mDatabase.child(SUBJECTS_NODE)
                 .addChildEventListener(childEventListener);
+
+
     }
 
-    private void configereGoogleSignin(){
+    private void configereGoogleSignin() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -377,19 +502,18 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
 
     @Override
     public void onBackPressed() {
-            if (drawer.isDrawerOpen()){
-             drawer.closeDrawer();
-            }else {
-                super.onBackPressed();
-            }
+        if (drawer.isDrawerOpen()) {
+            drawer.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 
-
-    private void logout(){
+    private void logout() {
 
         firebaseAuth.signOut();
-       // mGoogleSignInClient.signOut();
+        // mGoogleSignInClient.signOut();
         LoginManager.getInstance().logOut();
         TwitterCore.getInstance().getSessionManager().clearActiveSession();
 
@@ -445,14 +569,14 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
                 .child("timeBalance").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     Double balance = dataSnapshot.getValue(Double.class);
-                    if (balance != null && balance >= 60){
+                    if (balance != null && balance >= 60) {
                         checkForUnfinishedSession(subect);
-                    }else {
+                    } else {
                         Toast.makeText(getApplicationContext(), "Your balance must be more or equal 1 minutes", Toast.LENGTH_LONG).show();
                     }
-                }else {
+                } else {
                     Toast.makeText(getApplicationContext(), "Your balance must be more or equal 1 minutes", Toast.LENGTH_LONG).show();
                 }
             }
@@ -464,21 +588,21 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
         });
     }
 
-    private void checkForUnfinishedSession(Subject subect){
+    private void checkForUnfinishedSession(Subject subect) {
         mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId())
                 .child(ISTHEREUNFINISHEDSESSION).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     Boolean isThereUnfinishedSession = dataSnapshot.getValue(Boolean.class);
-                    if (isThereUnfinishedSession != null && !isThereUnfinishedSession){
+                    if (isThereUnfinishedSession != null && !isThereUnfinishedSession) {
                         startActivity(new Intent(getApplicationContext(), PostingQuestionActivity.class)
-                                .putExtra("subjectInfo",subect)
+                                .putExtra("subjectInfo", subect)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    }else {
+                    } else {
                         Toast.makeText(MainActivity.this, "Please end the unfinished question", Toast.LENGTH_SHORT).show();
                     }
-                }else {
+                } else {
                     mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId())
                             .child(ISTHEREUNFINISHEDSESSION).setValue(false);
                 }
@@ -492,8 +616,8 @@ public class MainActivity extends AppCompatActivity  implements SampleRecyclerVi
 
     }
 
-    public boolean checkIfNodesExists (DataSnapshot snapshot ,String ... ss){
-        for (String s : ss){
+    public boolean checkIfNodesExists(DataSnapshot snapshot, String... ss) {
+        for (String s : ss) {
             if (!snapshot.child(s).exists())
                 return false;
         }

@@ -23,6 +23,7 @@ import com.moallem.stu.R;
 import com.moallem.stu.adapters.SessionsAdapter;
 import com.moallem.stu.data.PrefsHelper;
 import com.moallem.stu.models.Session;
+import com.moallem.stu.utilities.Utils;
 
 import java.util.ArrayList;
 
@@ -99,47 +100,50 @@ public class SessionsFragment extends Fragment {
 
                 Session session = new Session();
                 if (dataSnapshot.exists()) {
-                    String firstComment = dataSnapshot.child("firstComment").getValue(String.class);
-                    String firstPic = dataSnapshot.child("firstPic").getValue(String.class);
-                    String questionType = dataSnapshot.child("questionType").getValue(String.class);
-                    String studentId = dataSnapshot.child("studentId").getValue(String.class);
-                    String studentName = dataSnapshot.child("studentName").getValue(String.class);
-                    Boolean isReplyed = dataSnapshot.child(ISREPLYED_NODE).getValue(Boolean.class);
-                    Boolean isFinished = dataSnapshot.child(ISFINISHED_NODE).getValue(Boolean.class);
-                    String teacherId = dataSnapshot.child("teacherId").getValue(String.class);
-                    String teacherName = dataSnapshot.child(TEACHERNAME_NODE).getValue(String.class);
-                    String teacherPic = dataSnapshot.child("teacherPic").getValue(String.class);
-                    String strorageDataId = dataSnapshot.child(STORAGEDATAID_FOLDER).getValue(String.class);
-                    Boolean isStudentReachedZeroMins = dataSnapshot.child(ISSTUDENTREACHERZERO_NODE).getValue(Boolean.class);
-                    String key = dataSnapshot.getKey();
-                    String date = dataSnapshot.child(DATE_NODE).getValue(String.class);
+                    if (Utils.checkIfNodesExists(dataSnapshot,"firstComment","firstPic","questionType","studentId"
+                            ,"studentName")) {
+                        String firstComment = dataSnapshot.child("firstComment").getValue(String.class);
+                        String firstPic = dataSnapshot.child("firstPic").getValue(String.class);
+                        String questionType = dataSnapshot.child("questionType").getValue(String.class);
+                        String studentId = dataSnapshot.child("studentId").getValue(String.class);
+                        String studentName = dataSnapshot.child("studentName").getValue(String.class);
+                        Boolean isReplyed = dataSnapshot.child(ISREPLYED_NODE).getValue(Boolean.class);
+                        Boolean isFinished = dataSnapshot.child(ISFINISHED_NODE).getValue(Boolean.class);
+                        String teacherId = dataSnapshot.child("teacherId").getValue(String.class);
+                        String teacherName = dataSnapshot.child(TEACHERNAME_NODE).getValue(String.class);
+                        String teacherPic = dataSnapshot.child("teacherPic").getValue(String.class);
+                        String strorageDataId = dataSnapshot.child(STORAGEDATAID_FOLDER).getValue(String.class);
+                        Boolean isStudentReachedZeroMins = dataSnapshot.child(ISSTUDENTREACHERZERO_NODE).getValue(Boolean.class);
+                        String key = dataSnapshot.getKey();
+                        String date = dataSnapshot.child(DATE_NODE).getValue(String.class);
 
-                    session.setTeacherName(teacherName);
-                    session.setDate(date);
-                    session.setStudentReachedZeroMins(isStudentReachedZeroMins);
-                    session.setTeacherPic(teacherPic);
-                    session.setTeacherId(teacherId);
-                    session.setFirstComment(firstComment);
-                    session.setFirstPic(firstPic);
-                    session.setQuestionType(questionType);
-                    session.setReplyed(isReplyed);
-                    session.setStudentId(studentId);
-                    session.setStudentName(studentName);
-                    session.setKey(key);
-                    session.setStorageDataID(strorageDataId);
-                    session.setFinished(isFinished);
+                        session.setTeacherName(teacherName);
+                        session.setDate(date);
+                        session.setStudentReachedZeroMins(isStudentReachedZeroMins);
+                        session.setTeacherPic(teacherPic);
+                        session.setTeacherId(teacherId);
+                        session.setFirstComment(firstComment);
+                        session.setFirstPic(firstPic);
+                        session.setQuestionType(questionType);
+                        session.setReplyed(isReplyed);
+                        session.setStudentId(studentId);
+                        session.setStudentName(studentName);
+                        session.setKey(key);
+                        session.setStorageDataID(strorageDataId);
+                        session.setFinished(isFinished);
 
-                    if (isTeacherHome && !session.getReplyed()) {
-                        sessions.add(session);
-                    } else if (PrefsHelper.getInstance(getActivity()).getUserType().equals("student")
-                            && firebaseAuth.getCurrentUser().getUid().equals(session.getStudentId()) && !isTeacherHome) {
-                        sessions.add(session);
-                    } else if (PrefsHelper.getInstance(getActivity()).getUserType().equals("teacher")
-                            && firebaseAuth.getCurrentUser().getUid().equals(session.getTeacherId()) && !isTeacherHome) {
-                        sessions.add(session);
+                        if (isTeacherHome && !session.getReplyed()) {
+                            sessions.add(session);
+                        } else if (PrefsHelper.getInstance(getActivity()).getUserType().equals("student")
+                                && firebaseAuth.getCurrentUser().getUid().equals(session.getStudentId()) && !isTeacherHome) {
+                            sessions.add(session);
+                        } else if (PrefsHelper.getInstance(getActivity()).getUserType().equals("teacher")
+                                && firebaseAuth.getCurrentUser().getUid().equals(session.getTeacherId()) && !isTeacherHome) {
+                            sessions.add(session);
+                        }
+
+                        adapter.notifyItemInserted(sessions.size() - 1);
                     }
-
-                    adapter.notifyItemInserted(sessions.size() - 1);
                 }
                 //checkIFListisEmpty();
             }

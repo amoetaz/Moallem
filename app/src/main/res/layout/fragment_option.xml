@@ -62,7 +62,7 @@
                 android:textColor="@color/app_text_color"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_centerHorizontal="true"
-                android:textSize="22sp"
+                android:textSize="16sp"
                 android:text="@string/already_have_acccont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

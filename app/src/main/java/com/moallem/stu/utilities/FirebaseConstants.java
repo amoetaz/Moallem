@@ -23,4 +23,6 @@ public class FirebaseConstants {
 
     public static final String MONEYBALANCE_NODE = "moneyBalance";
     public static final String ISTHEREUNFINISHEDSESSION = "isThereUnfinishedSession";
+
+    public static final String USEDPROMOCODEIDsUSERS = "usedPromocodeIdsUsers";
 }

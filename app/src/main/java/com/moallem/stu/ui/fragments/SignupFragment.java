@@ -15,6 +15,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -58,7 +60,11 @@ public class SignupFragment extends Fragment {
     @BindView(R.id.signup_buttonsignup)
     Button signupButton;
     Unbinder unbinder;
-
+    @BindView(R.id.radiobutton1)
+    RadioButton radiobutton1;
+    @BindView(R.id.radiobutton2)
+    RadioButton radiobutton2;
+    private String schoolType ;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference mDatabase;
 
@@ -73,11 +79,11 @@ public class SignupFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        if ( user!= null ) {
+        if (user != null) {
             user.reload().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful() && getActivity() != null){
+                    if (task.isSuccessful() && getActivity() != null) {
                         if (user.isEmailVerified()) {
                             startActivity(new Intent(getActivity(), MainActivity.class));
                             getActivity().finish();
@@ -96,9 +102,33 @@ public class SignupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
         unbinder = ButterKnife.bind(this, view);
         progressBar.setVisibility(View.GONE);
+        RadioGroup rg = (RadioGroup) view.findViewById(R.id.school_type);
+
+        int checkedRadioButtonId = rg.getCheckedRadioButtonId();
+        if (checkedRadioButtonId == radiobutton2.getId()){
+            schoolType = radiobutton2.getText().toString();
+        }else {
+            schoolType = radiobutton1.getText().toString();
+        }
+        //Toast.makeText(getActivity(), schoolType, Toast.LENGTH_SHORT).show();
+            rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    switch (checkedId) {
+                        case R.id.radiobutton1:
+                            schoolType = radiobutton1.getText().toString();
+                            //Toast.makeText(getActivity(), schoolType, Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.radiobutton2:
+                            schoolType = radiobutton2.getText().toString();
+                            //Toast.makeText(getActivity(), schoolType, Toast.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
         return view;
     }
-
 
 
     @Override
@@ -129,7 +159,7 @@ public class SignupFragment extends Fragment {
         String passwordStr = password.getText().toString().trim();
 
         if (isFieldsNotEmpty() && getActivity() != null) {
-            if (!isPasswordlessthan8() ) {
+            if (!isPasswordlessthan8()) {
                 FirebaseUser currentUser = firebaseAuth.getCurrentUser();
                 if (currentUser == null) {
                     firebaseAuth.createUserWithEmailAndPassword(emailStr, passwordStr)
@@ -143,7 +173,7 @@ public class SignupFragment extends Fragment {
                                                 initializeFirebasedatabaseVariables(emailStr);
                                                 updateProfileAndLaunch(user);
                                                 progressBar.setVisibility(View.GONE);
-                                            }else {
+                                            } else {
                                                 user.sendEmailVerification()
                                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
@@ -151,8 +181,7 @@ public class SignupFragment extends Fragment {
                                                                 progressBar.setVisibility(View.GONE);
                                                                 if (task.isSuccessful()) {
                                                                     Toast.makeText(getContext(), R.string.verify_email_sent, Toast.LENGTH_LONG).show();
-                                                                }
-                                                                else {
+                                                                } else {
                                                                     Toast.makeText(getContext(), R.string.wrong_message, Toast.LENGTH_SHORT).show();
                                                                 }
                                                             }
@@ -165,16 +194,16 @@ public class SignupFragment extends Fragment {
                                     }
                                 }
                             });
-                }else {
+                } else {
                     currentUser.reload().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 progressBar.setVisibility(View.GONE);
-                                if (currentUser.isEmailVerified()){
+                                if (currentUser.isEmailVerified()) {
                                     initializeFirebasedatabaseVariables(emailStr);
                                     updateProfileAndLaunch(currentUser);
-                                }else {
+                                } else {
                                     Toast.makeText(getContext(), R.string.verify_email_toast, Toast.LENGTH_LONG).show();
                                 }
                             }
@@ -182,10 +211,10 @@ public class SignupFragment extends Fragment {
                     });
 
                 }
-            }else {
+            } else {
                 password.setText("");
             }
-        }else {
+        } else {
             progressBar.setVisibility(View.GONE);
             Toast.makeText(getActivity(), R.string.enter_valid_data, Toast.LENGTH_SHORT).show();
         }
@@ -202,7 +231,7 @@ public class SignupFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (getActivity() != null){
+                        if (getActivity() != null) {
                             FirebaseUtils.setUerType(getContext(), firebaseAuth.getCurrentUser().getUid(),
                                     new FirebaseUtils.Action() {
                                         @Override
@@ -231,9 +260,9 @@ public class SignupFragment extends Fragment {
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
             mDatabase.child(USERINFO_NODE).child(userId)
-                        .child(EMAIL_NODE).setValue(emailStr);
+                    .child(EMAIL_NODE).setValue(emailStr);
             mDatabase.child(USERINFO_NODE).child(userId)
-                        .child(USERNAME_NODE).setValue(username.getText().toString());
+                    .child(USERNAME_NODE).setValue(username.getText().toString());
 
             mDatabase.child(USERINFO_NODE).child(userId)
                     .child("education").setValue(Edu.getText().toString());
@@ -241,27 +270,29 @@ public class SignupFragment extends Fragment {
             mDatabase.child(USERINFO_NODE).child(userId)
                     .child(ISTHEREUNFINISHEDSESSION).setValue(false);
 
+            mDatabase.child(USERINFO_NODE).child(userId)
+                    .child("schoolType").setValue(schoolType);
+
         }
 
     }
 
 
-
-    private boolean isFieldsNotEmpty(){
+    private boolean isFieldsNotEmpty() {
         return !TextUtils.isEmpty(email.getText()) && !TextUtils.isEmpty(password.getText())
                 && !TextUtils.isEmpty(username.getText());
     }
 
-    private boolean isPasswordlessthan8(){
-        return password.getText().length() <8;
+    private boolean isPasswordlessthan8() {
+        return password.getText().length() < 8;
     }
 
 
-    public void hideKeyboard(){
+    public void hideKeyboard() {
         View view = getActivity().getCurrentFocus();
-        if (view != null){
+        if (view != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 

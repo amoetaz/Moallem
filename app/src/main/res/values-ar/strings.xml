@@ -69,6 +69,9 @@
     <string name="sending_toast">إرسال …</string>
     <string name="press_mic_and_release">إضغط زر الميكرفون ثم إرفع إصبعك عند الإنتهاء</string>
     <string name="permissions_denied">تم رفض الأذونات</string>
+    <string name="arabic_school">عربي</string>
+    <string name="language_school">لغات</string>
+    <string name="free_minutes">دقائق مجانية</string>
 
     <string-array name="egyptOperatersName">
         <item>أورانج</item>

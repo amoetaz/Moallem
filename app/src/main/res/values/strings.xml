@@ -80,6 +80,9 @@
     <string name="press_mic_and_release">Press mic icon then release when finish</string>
     <string name="permissions_denied">permissions denied</string>
     <string name="get50off" translatable="false">Get 50% off from your upcoming session when your friend use Moallem\n\nRefer NOW!</string>
+    <string name="arabic_school">Arabic School</string>
+    <string name="language_school">Language School</string>
+    <string name="free_minutes">Free Minutes</string>
 
     <string-array name="egyptOperatersCode" translatable="false">
         <item>60201</item>
@@ -106,5 +109,15 @@
         <item>11.99 EGP</item>
         <item>23.99 EGP</item>
     </string-array>
+
+
+    <string-array name="egyptPricesPromocode">
+    <item>1.99 EGP</item>
+    <item>3.99 EGP</item>
+    <item>6.99 EGP</item>
+    <item>11.99 EGP</item>
+</string-array>
+
+
 
 </resources>

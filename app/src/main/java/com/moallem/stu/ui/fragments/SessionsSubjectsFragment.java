@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.moallem.stu.R;
 import com.moallem.stu.adapters.SessionsSubjectsAdapter;
 import com.moallem.stu.models.Subject;
+import com.moallem.stu.utilities.Utils;
 
 import java.util.ArrayList;
 
@@ -76,22 +77,27 @@ public class SessionsSubjectsFragment extends Fragment {
         adapter = new SessionsSubjectsAdapter(getActivity(),sList);
         rvSubjects.setAdapter(adapter);
 
+        if (sList != null && sList.size() > 0){
+            sList.clear();
+        }
         mDatabase.child(SUBJECTS_NODE)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
-                        String subjectName = dataSnapshot.child("name").getValue(String.class);
-                        String subjectIconUrl = dataSnapshot.child("subIcon").getValue(String.class);
-                        String arabicName = dataSnapshot.child("arabicName").getValue(String.class);
-                        String key = dataSnapshot.getKey();
-                        Subject subject = new Subject();
+                        if (Utils.checkIfNodesExists(dataSnapshot ,"name","subIcon","arabicName")) {
+                            String subjectName = dataSnapshot.child("name").getValue(String.class);
+                            String subjectIconUrl = dataSnapshot.child("subIcon").getValue(String.class);
+                            String arabicName = dataSnapshot.child("arabicName").getValue(String.class);
+                            String key = dataSnapshot.getKey();
+                            Subject subject = new Subject();
 
-                        subject.setArabicName(arabicName);
-                        subject.setName(subjectName);
-                        subject.setImage(subjectIconUrl);
-                        subject.setKey(key);
-                        sList.add(subject);
-                        adapter.notifyItemInserted(sList.size() - 1);
+                            subject.setArabicName(arabicName);
+                            subject.setName(subjectName);
+                            subject.setImage(subjectIconUrl);
+                            subject.setKey(key);
+                            sList.add(subject);
+                            adapter.notifyItemInserted(sList.size() - 1);
+                        }
                     }
 
                     @Override

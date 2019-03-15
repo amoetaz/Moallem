@@ -23,7 +23,11 @@ public class RegisteringActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.fregister, new OptionFragment())
                     .commit();
         }
+
+
+
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
