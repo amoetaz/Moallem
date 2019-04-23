@@ -1,6 +1,9 @@
 package com.moallem.stu.ui.activities;
 
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
     private PrimaryDrawerItem item2;
     private boolean isThereUnfinishedSession;
     private ChildEventListener checkerChildEventListener;
+    AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,6 +242,22 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
                 .build();
     }
 
+    private void copyToclipboard(String text){
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copy", text);
+        clipboard.setPrimaryClip(clip);
+    }
+
+    private void sharePromo(String msg){
+
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, msg);
+        startActivity(Intent.createChooser(sharingIntent, "dkmc"));
+    }
+
+
     private void freeMinutesDialog() {
         String promocode = String.format("moallem%s", Utils.getCurrentUserId().substring(0, 8));
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
@@ -249,11 +269,20 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
         Button button = (Button) mView.findViewById(R.id.submit_button);
         TextView codeToCopy = mView.findViewById(R.id.code_to_copy);
         EditText promocodeField = mView.findViewById(R.id.promocode_field);
+        ImageView share = mView.findViewById(R.id.share_img);
+
+
+        codeToCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyToclipboard(promocode);
+                Toast.makeText(MainActivity.this, "Promocode has been copied to clipboard", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         codeToCopy.setText(promocode);
-        promocodeField.setText(promocode);
 
-        AlertDialog dialog = builder.create();
+        dialog = builder.create();
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation_2;
         dialog.show();
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -265,40 +294,40 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkPromoCodeValidility(promocodeField.getText().toString());
+                if (Utils.isNetworkConnected(MainActivity.this)) {
+                    isPromocodeProcessingOpen(promocodeField.getText().toString());
+
+                }else {
+                    Toast.makeText(MainActivity.this, R.string.check_internet_msg, Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharePromo(promocode);
             }
         });
 
 
     }
 
-    /*private void adjustDialog(AlertDialog dialog) {
-        Window window = dialog.getWindow();
-        WindowManager.LayoutParams params = window.getAttributes();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = 500;
-        params.gravity = Gravity.TOP;
-        window.setAttributes(params);
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE );
-
-    }
-*/
-    private void checkPromoCodeValidility(String promocode) {
-        String subId = promocode.replace("moallem", "");
-        Toast.makeText(this, subId, Toast.LENGTH_SHORT).show();
-        Query query = mDatabase.child(USERINFO_NODE).orderByKey().startAt(subId).limitToFirst(1);
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void isPromocodeProcessingOpen(String s) {
+        mDatabase.child("Utils").child("isPromocodeProcessingOpen").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    //get the id which start with given substring
-                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                        Log.d(TAG, "onDataChange: " + dataSnapshot1.getKey());
-                        checkIfPromocodeUsedBefore(dataSnapshot1.getKey());
+                if (dataSnapshot.exists()){
+                    Boolean isOpen = dataSnapshot.getValue(Boolean.class);
+                    if (isOpen != null && isOpen){
+                        checkPromoCodeValidility(s);
+                    }else{
+                        Toast.makeText(MainActivity.this, "Please try again later", Toast.LENGTH_SHORT).show();
                     }
+                }else {
+                    mDatabase.child("Utils").child("isPromocodeProcessingOpen").setValue(true);
                 }
-
             }
 
             @Override
@@ -306,6 +335,40 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
 
             }
         });
+    }
+
+
+
+    private void checkPromoCodeValidility(String promocode) {
+        String currentPromocode = String.format("moallem%s", Utils.getCurrentUserId().substring(0, 8));
+        if (!promocode.trim().isEmpty() && !currentPromocode.equals(promocode)) {
+
+            String subId = promocode.replace("moallem", "");
+            Toast.makeText(this, subId, Toast.LENGTH_SHORT).show();
+            Query query = mDatabase.child(USERINFO_NODE).orderByKey().startAt(subId).limitToFirst(1);
+
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        //get the id which start with given substring
+                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                            Log.d(TAG, "onDataChange: " + dataSnapshot1.getKey());
+                            checkIfPromocodeUsedBefore(dataSnapshot1.getKey());
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }else{
+            Toast.makeText(this, "Please enter valid promocode", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     private void checkIfPromocodeUsedBefore(String userId) {
@@ -328,19 +391,57 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
                             Toast.makeText(MainActivity.this, "Sorry you have used this promocode before"
                                     , Toast.LENGTH_SHORT).show();
                         } else {
+                            dialog.dismiss();
+                            updateFirebaseBalanceValues(Utils.getCurrentUserId(),5);
+                            updateFirebaseBalanceValues(userId,5);
+
                             mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId())
                                     .child(USEDPROMOCODEIDsUSERS).setValue(userids + "," + userId);
-                            addUserIdToPromocodeFriendList(Utils.getCurrentUserId());
+                            addUserIdToPromocodeFriendList(userId);
+                            Toast.makeText(MainActivity.this,
+                                    "5 minutes has been added to your account and your friend's account", Toast.LENGTH_LONG).show();
                         }
                     }
+                }
+                else {
+                    dialog.dismiss();
+                    updateFirebaseBalanceValues(Utils.getCurrentUserId(),5);
+                    updateFirebaseBalanceValues(userId,5);
+
+                    mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId())
+                            .child(USEDPROMOCODEIDsUSERS).setValue(userId);
+                    addUserIdToPromocodeFriendList(userId);
+                    Toast.makeText(MainActivity.this,
+                            "5 minutes has been added to your account and your friend's account", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+    }
+
+    public void updateFirebaseBalanceValues(String userID,int value) {
+        Double secs = (double) (value * 60);
+
+        mDatabase.child(USERINFO_NODE).child(userID).child("timeBalance")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            Double balance = dataSnapshot.getValue(Double.class);
+                            if (balance != null) {
+                                balance += secs;
+                                mDatabase.child(USERINFO_NODE).child(userID).child("timeBalance").setValue(balance);
+                            }
+                        } else {
+                            mDatabase.child(USERINFO_NODE).child(userID).child("timeBalance").setValue(secs);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {}
+                });
     }
 
     private void addUserIdToPromocodeFriendList(String id) {
@@ -348,23 +449,28 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
                 .child(USEDPROMOCODEIDsUSERS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 if (dataSnapshot.exists()) {
 
                     String userids = dataSnapshot.getValue(String.class);
                     if (userids != null) {
                         mDatabase.child(USERINFO_NODE).child(id)
-                                .child(USEDPROMOCODEIDsUSERS).setValue(userids + ",");
-                        addUserIdToPromocodeFriendList(Utils.getCurrentUserId());
+                                .child(USEDPROMOCODEIDsUSERS).setValue(","+Utils.getCurrentUserId());
 
                     }
+                }else{
+
+                    mDatabase.child(USERINFO_NODE).child(id)
+                            .child(USEDPROMOCODEIDsUSERS).setValue(Utils.getCurrentUserId());
+
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+
+
     }
 
     private void startPaymentActivity() {
@@ -406,7 +512,7 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
 
     private void checkForNewVersion() {
         mDatabase.child("versionsUpdateNotify").child("studentApp")
-                .child("isVersion1-0-2Updated").addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("isVersion1-0-4Updated").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {

@@ -269,11 +269,17 @@ public class LoginFragment extends Fragment {
         String uid = firebaseAuth.getCurrentUser().getUid();
 
         if (newUser){
+            String userEmail = firebaseAuth.getCurrentUser().getEmail();
             databaseReference.child(USERINFO_NODE).child(uid)
                     .child(USERNAME_NODE).setValue(firebaseAuth.getCurrentUser().getDisplayName());
 
             databaseReference.child(USERINFO_NODE).child(uid)
                     .child(ISTHEREUNFINISHEDSESSION).setValue(false);
+
+            if (userEmail != null) {
+                databaseReference.child(USERINFO_NODE).child(uid)
+                        .child(USERNAME_NODE).setValue(userEmail);
+            }
         }
 
     }

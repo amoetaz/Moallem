@@ -79,10 +79,11 @@
     <string name="sending_toast">Sending …</string>
     <string name="press_mic_and_release">Press mic icon then release when finish</string>
     <string name="permissions_denied">permissions denied</string>
-    <string name="get50off" translatable="false">Get 50% off from your upcoming session when your friend use Moallem\n\nRefer NOW!</string>
+    <string name="get50off" translatable="false">Get 5 minutes when you refer a friend to use Moallem\ncopy the code and let your friend paste in his app</string>
     <string name="arabic_school">Arabic School</string>
     <string name="language_school">Language School</string>
     <string name="free_minutes">Free Minutes</string>
+    <string name="enter_phone_number">Please enter phone number</string>
 
     <string-array name="egyptOperatersCode" translatable="false">
         <item>60201</item>
@@ -111,13 +112,26 @@
     </string-array>
 
 
-    <string-array name="egyptPricesPromocode">
-    <item>1.99 EGP</item>
-    <item>3.99 EGP</item>
-    <item>6.99 EGP</item>
-    <item>11.99 EGP</item>
-</string-array>
+    <string-array name="egyptPricesPromocode" >
+        <item>1.99 EGP</item>
+        <item>3.99 EGP</item>
+        <item>6.99 EGP</item>
+        <item>11.99 EGP</item>
+    </string-array>
+
+    <string-array name="productsName" translatable="false">
+        <item>10M_price</item>
+        <item>20M_price</item>
+        <item>30M_price</item>
+        <item>60M_price</item>
+    </string-array>
 
 
 
+    <string-array name="productsPromocodeName" translatable="false">
+        <item>10M_promo</item>
+        <item>20M_promo</item>
+        <item>30M_promo</item>
+        <item>60M_promo</item>
+    </string-array>
 </resources>

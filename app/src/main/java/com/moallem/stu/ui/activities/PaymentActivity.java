@@ -3,6 +3,7 @@ package com.moallem.stu.ui.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -20,6 +21,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.moallem.stu.R;
 import com.moallem.stu.api.ApiClient;
 import com.moallem.stu.api.ApiService;
@@ -37,6 +43,8 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.moallem.stu.utilities.FirebaseConstants.USERINFO_NODE;
 
 public class PaymentActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
@@ -77,18 +85,23 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
     String PrivateKey = "8F71tgPdTkBn6qtu5pug";
     String msisdn;
     private String itemPrice,itemAmount;
-    private String [] operatorsCode,productCats,prices;
+    private String [] operatorsCode,productCats,prices,prodcutsIds;
+    private DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
         ButterKnife.bind(this);
+        reference = FirebaseDatabase.getInstance().getReference();
 
         getCountryValues();
-        itemPrice = prices[0];
+
         itemAmount = radioQuantity1.getText().toString();
         initialzePrices(prices);
+        prodcutsIds = getResources().getStringArray(R.array.productsName);
+        productId = prodcutsIds[0];
+        itemPrice = prices[0];
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this
                 , R.array.egyptOperatersName, android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -121,14 +134,20 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
         paymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String phoneNum = userPhoneNumber.getText().toString();
                 if (Utils.isNetworkConnected(getApplicationContext())) {
-                    msisdn = getFullPhoneNumber(userPhoneNumber.getText().toString());
-                    if (MsisdnRegex.isValidMsisdn(msisdn)) {
-                        callApi();
-                        progressBar.setVisibility(View.VISIBLE);
-                        preventInteracting();
+
+                    if (!phoneNum.equals("")) {
+                        msisdn = getFullPhoneNumber(phoneNum);
+                        if (MsisdnRegex.isValidMsisdn(msisdn)) {
+                            callApi();
+                            progressBar.setVisibility(View.VISIBLE);
+                            preventInteracting();
+                        } else {
+                            Toast.makeText(PaymentActivity.this, R.string.valid_num_msg, Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        Toast.makeText(PaymentActivity.this, R.string.valid_num_msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivity.this, R.string.enter_valid_data, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(PaymentActivity.this, R.string.check_internet_msg, Toast.LENGTH_SHORT).show();
@@ -140,7 +159,7 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
 
     private void setPromocodeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(
-                PaymentActivity.this);
+                PaymentActivity.this,R.style.AlertDialogTheme);
         // Get the layout inflater
         LayoutInflater inflater = PaymentActivity.this.getLayoutInflater();
         View mView = inflater.inflate(R.layout.custom_promocode_dialog, null);
@@ -152,8 +171,12 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
                             public void onClick(DialogInterface dialog,
                                                 int id) {
 
-                               String promocodeValue = promocode.getText().toString();
-                                Toast.makeText(PaymentActivity.this, promocodeValue, Toast.LENGTH_SHORT).show();
+                                String promocodeValue = promocode.getText().toString();
+                                if (Utils.isNetworkConnected(PaymentActivity.this)) {
+                                    checkOnPromocode(promocodeValue);
+                                } else {
+                                    Toast.makeText(PaymentActivity.this, R.string.check_internet_msg, Toast.LENGTH_SHORT).show();
+                                }
 
                             }
                         })
@@ -166,6 +189,85 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
                         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+
+
+    }
+
+    private void checkOnPromocode(String promocodeValue) {
+
+        if (!promocodeValue.trim().isEmpty()) {
+            reference.child("appPromocodes").child(promocodeValue).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.exists()){
+                        Boolean isActive = dataSnapshot.getValue(Boolean.class);
+                        if (isActive != null && isActive){
+                            checkIfPromocodeUsedBefore(promocodeValue);
+
+                        }else {
+                            Toast.makeText(PaymentActivity.this, "Promocode has been expired", Toast.LENGTH_SHORT).show();
+                        }
+                    }else {
+                        Toast.makeText(PaymentActivity.this, "Invalid promocode", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        } else {
+            Toast.makeText(this, "Please enter valid promocode", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void checkIfPromocodeUsedBefore(String promocodeValue) {
+        reference.child(USERINFO_NODE).child(Utils.getCurrentUserId()).child("usedAppPromocode")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            boolean isUsed = false;
+                            String promos = dataSnapshot.getValue(String.class);
+                            if (promos != null) {
+                                String [] promoArr = promos.split(",");
+                                for(String value : promoArr){
+                                    if (value.equals(promocodeValue))
+                                        isUsed = true;
+                                }
+                                if (isUsed){
+                                    Toast.makeText(PaymentActivity.this, "You have used This promocode before", Toast.LENGTH_SHORT).show();
+                                }else {
+
+                                    applyChangesAfterSuccessfullPromo(promos+","+promocodeValue);
+                                }
+                            }
+                        }else {
+                            applyChangesAfterSuccessfullPromo(promocodeValue);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {}
+                });
+    }
+
+    private void applyChangesAfterSuccessfullPromo(String newPromo){
+        prodcutsIds = getResources().getStringArray(R.array.productsPromocodeName);
+        prices =  getResources().getStringArray(R.array.egyptPricesPromocode);
+        editUi(prices);
+        reference.child(USERINFO_NODE).child(Utils.getCurrentUserId()).child("usedAppPromocode")
+                .setValue(newPromo);
+    }
+
+    private void editUi(String[] prices) {
+        price1.setText(prices[0]);
+        price2.setText(prices[1]);
+        price3.setText(prices[2]);
+        price4.setText(prices[3]);
     }
 
     private void getCountryValues() {
@@ -190,7 +292,6 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
 
     private void callApi() {
 
-
         String OrderInfo = new RandomString(10, new Random()).nextString();
         String message = ProductCatalogName + productId + msisdn + operatorCode + OrderInfo;
         String signature = Utils.CalculateDigest(PublicKey, message, PrivateKey);
@@ -214,8 +315,9 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
                 progressBar.setVisibility(View.INVISIBLE);
                 allowInteracting();
                 initTransition = response.body();
-                if (response.isSuccessful() && initTransition != null) {
-                    if (initTransition.getTransactionId() != null && initTransition.getOperationStatusCode().equals("10")) {
+                if (initTransition != null) {
+                    if (initTransition.getTransactionId() != null
+                            && initTransition.getOperationStatusCode().equals("10")) {
                         Intent intent = new Intent(PaymentActivity.this, VerificationPincodeActivity.class);
                         intent.putExtra("request", initRequest);
                         intent.putExtra("transition", initTransition);
@@ -284,29 +386,30 @@ public class PaymentActivity extends AppCompatActivity implements CompoundButton
             itemAmount = buttonView.getText().toString();
             if (buttonView == radioQuantity1) {
                 itemPrice = prices[0];
-                productId = "10M_price";
+                productId = prodcutsIds[0];
                 radioQuantity1.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity2, radioQuantity3, radioQuantity4);
                 uncheckRadioButton(radioQuantity2, radioQuantity3, radioQuantity4);
             } else if (buttonView == radioQuantity2) {
                 itemPrice = prices[1];
-                productId = "20M_price";
+                productId = prodcutsIds[1];
                 radioQuantity2.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity1, radioQuantity3, radioQuantity4);
                 uncheckRadioButton(radioQuantity1, radioQuantity3, radioQuantity4);
             } else if (buttonView == radioQuantity3) {
                 itemPrice = prices[2];
-                productId = "30M_price";
+                productId = prodcutsIds[2];
                 radioQuantity3.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity1, radioQuantity2, radioQuantity4);
                 uncheckRadioButton(radioQuantity1, radioQuantity2, radioQuantity4);
             } else if (buttonView == radioQuantity4) {
                 itemPrice = prices[3];
-                productId = "60M_price";
+                productId = prodcutsIds[3];
                 radioQuantity4.setBackgroundResource(R.drawable.payment_choise_withborder);
                 removeBorderStyle(radioQuantity2, radioQuantity3, radioQuantity1);
                 uncheckRadioButton(radioQuantity1, radioQuantity2, radioQuantity3);
             }
+
         }
     }
 

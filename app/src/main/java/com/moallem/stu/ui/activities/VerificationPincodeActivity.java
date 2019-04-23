@@ -89,7 +89,7 @@ public class VerificationPincodeActivity extends AppCompatActivity {
 
         if ((savedInstanceState != null)) {
             counter = savedInstanceState.getInt(COUNTER_KEY);
-         }
+        }
 
         if (getIntent().hasExtra("request") && getIntent().hasExtra("transition")) {
             initRequest = getIntent().getExtras().getParcelable("request");
@@ -133,7 +133,7 @@ public class VerificationPincodeActivity extends AppCompatActivity {
         if (Utils.getDeviceLanguage(this).equals("arabic")) {
             priceConfirmation.setText(s1+itemAmount+s2+itemPrice);
         } else {
-            priceConfirmation.setText("You will perchase "+itemAmount+" for "+itemPrice);
+            priceConfirmation.setText("You will purchase "+itemAmount+" for "+itemPrice);
         }
     }
 
@@ -157,13 +157,14 @@ public class VerificationPincodeActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.INVISIBLE);
                 allowInteracting();
                 ResendPincodeResponse body = response.body();
-                if (body != null && response.isSuccessful()){
+                if (body != null ){
 
                     if (body.getOperationStatusCode() != null && body.getOperationStatusCode().equals("0")){
                         counter++;
                         Toast.makeText(VerificationPincodeActivity.this
                                 , R.string.pin_sent_toast, Toast.LENGTH_SHORT).show();
                     }
+
                 }else {
                     Toast.makeText(VerificationPincodeActivity.this,
                             R.string.wrong_msg_try_again, Toast.LENGTH_SHORT).show();
@@ -234,7 +235,12 @@ public class VerificationPincodeActivity extends AppCompatActivity {
                             Toast.makeText(VerificationPincodeActivity.this, R.string.wrong_msg_try_again, Toast.LENGTH_SHORT).show();
                         }
 
-                    }else if (verificationResponse.getOperationStatusCode().equals("11")){
+                    }
+                    else if ((verificationResponse.getOperationStatusCode().equals("4"))) {
+
+                        Toast.makeText(VerificationPincodeActivity.this, R.string.dont_have_credit, Toast.LENGTH_SHORT).show();
+                    }
+                    else if (verificationResponse.getOperationStatusCode().equals("11")){
                         Toast.makeText(VerificationPincodeActivity.this, R.string.invalid_pincode_toast, Toast.LENGTH_SHORT).show();
                     }
 
@@ -310,16 +316,16 @@ public class VerificationPincodeActivity extends AppCompatActivity {
     }
 
     public int getMinutes(String amount) {
-        if (amount.equals("10M_price")) {
+        if (amount.equals("10M_price") || amount.equals("10M_promo") ) {
             return 10;
-        } else if (amount.equals("20M_price")) {
+        } else if (amount.equals("20M_price") || amount.equals("20M_promo")) {
             return 20;
-        } else if (amount.equals("30M_price")) {
+        } else if (amount.equals("30M_price") || amount.equals("30M_promo")) {
             return 30;
-        } else if (amount.equals("30M_price")) {
+        } else if (amount.equals("60M_price") || amount.equals("60M_promo")) {
             return 30;
         } else {
-            return 60;
+            return 10;
         }
     }
 
@@ -337,7 +343,7 @@ public class VerificationPincodeActivity extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (editText1.getText().toString().length() == 1)     //size as per your requirement
+                if (editText1.getText().toString().length() == 1)
                 {
                     editText2.requestFocus();
                 }
