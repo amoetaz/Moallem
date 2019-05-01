@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -35,9 +37,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.TwitterAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.moallem.stu.R;
 import com.moallem.stu.ui.activities.MainActivity;
 import com.moallem.stu.utilities.FirebaseUtils;
+import com.moallem.stu.utilities.Utils;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
@@ -179,7 +184,7 @@ public class LoginFragment extends Fragment {
                                         , new FirebaseUtils.Action() {
                                             @Override
                                             public void onCompleteListener() {
-
+                                             setTokenID(firebaseAuth.getCurrentUser().getUid());
                                              getActivity().finish();
                                              startActivity(new Intent(getContext(), MainActivity.class));
 
@@ -250,6 +255,7 @@ public class LoginFragment extends Fragment {
                                             @Override
                                             public void onCompleteListener() {
                                                 checkuserexisting(task.getResult().getAdditionalUserInfo().isNewUser());
+                                                setTokenID(firebaseAuth.getCurrentUser().getUid());
                                                 getActivity().finish();
                                                 startActivity(new Intent(getContext(), MainActivity.class));
                                             }
@@ -319,6 +325,7 @@ public class LoginFragment extends Fragment {
                                         @Override
                                         public void onCompleteListener() {
                                             checkuserexisting(task.getResult().getAdditionalUserInfo().isNewUser());
+                                            setTokenID(firebaseAuth.getCurrentUser().getUid());
                                             getActivity().finish();
                                             startActivity(new Intent(getContext(), MainActivity.class));
                                         }
@@ -342,5 +349,18 @@ public class LoginFragment extends Fragment {
         }
     }
 
+
+    private void setTokenID(String userId){
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( getActivity()
+                ,  new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String mToken = instanceIdResult.getToken();
+                databaseReference.child(USERINFO_NODE).child(userId).child("tokenId")
+                        .setValue(mToken);
+            }
+        });
+
+    }
 
 }

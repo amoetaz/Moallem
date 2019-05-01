@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.moallem.stu.R;
 import com.moallem.stu.ui.activities.MainActivity;
 import com.moallem.stu.utilities.FirebaseUtils;
@@ -85,8 +88,18 @@ public class SignupFragment extends Fragment {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful() && getActivity() != null) {
                         if (user.isEmailVerified()) {
-                            startActivity(new Intent(getActivity(), MainActivity.class));
-                            getActivity().finish();
+                            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( getActivity()
+                                    ,  new OnSuccessListener<InstanceIdResult>() {
+                                        @Override
+                                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                                            String mToken = instanceIdResult.getToken();
+                                            mDatabase.child(USERINFO_NODE).child(firebaseAuth.getCurrentUser().getUid()).child("tokenId")
+                                                    .setValue(mToken);
+                                            getActivity().finish();
+                                            startActivity(new Intent(getContext(), MainActivity.class));
+                                        }
+                                    });
+
                         }
                     }
                 }
@@ -236,8 +249,19 @@ public class SignupFragment extends Fragment {
                                     new FirebaseUtils.Action() {
                                         @Override
                                         public void onCompleteListener() {
-                                            getActivity().finish();
-                                            startActivity(new Intent(getContext(), MainActivity.class));
+
+                                            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( getActivity()
+                                                    ,  new OnSuccessListener<InstanceIdResult>() {
+                                                        @Override
+                                                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                                                            String mToken = instanceIdResult.getToken();
+                                                            mDatabase.child(USERINFO_NODE).child(firebaseAuth.getCurrentUser().getUid()).child("tokenId")
+                                                                    .setValue(mToken);
+                                                            getActivity().finish();
+                                                            startActivity(new Intent(getContext(), MainActivity.class));
+                                                        }
+                                                    });
+
                                         }
                                     });
 

@@ -12,8 +12,6 @@ import com.moallem.stu.ui.fragments.OptionFragment;
 
 public class RegisteringActivity extends AppCompatActivity {
 
-    private static final String TAG = "RegisteringAityclass";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,8 +21,6 @@ public class RegisteringActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.fregister, new OptionFragment())
                     .commit();
         }
-
-
 
     }
 

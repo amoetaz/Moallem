@@ -7,9 +7,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -69,6 +71,7 @@ import static com.moallem.stu.utilities.FirebaseConstants.ISTHEREUNFINISHEDSESSI
 import static com.moallem.stu.utilities.FirebaseConstants.SUBJECTS_NODE;
 import static com.moallem.stu.utilities.FirebaseConstants.USEDPROMOCODEIDsUSERS;
 import static com.moallem.stu.utilities.FirebaseConstants.USERINFO_NODE;
+import static com.moallem.stu.utilities.Utils.msg;
 
 public class MainActivity extends AppCompatActivity implements SampleRecyclerViewAdapter.OnItemClicked {
 
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
         bind = ButterKnife.bind(this);
         firebaseAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        checkIfUserNotLogin();
+        //checkIfUserNotLogin();
         //configereGoogleSignin();
 
         checkForNewVersion();
@@ -176,25 +179,28 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
     }
 
     private void configNavigationDrawer() {
+        Typeface font = ResourcesCompat.getFont(this,R.font.roboto_regular);
+        String displayName = firebaseAuth.getCurrentUser() != null ? firebaseAuth.getCurrentUser().getDisplayName()
+                : "Moallem";
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIcon(R.drawable.test_icon)
-                .withIdentifier(1).withName(R.string.session_navigationdrawer);
+                .withIdentifier(1).withTypeface(font).withName(R.string.session_navigationdrawer);
 
         item2 = new PrimaryDrawerItem().withIcon(R.drawable.ic_minutes).withBadge("0")
                 .withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.app_title_color))
-                .withIdentifier(2).withName(R.string.minutes_navigationdrawer);
-
-        PrimaryDrawerItem item4 = new PrimaryDrawerItem().withIcon(R.drawable.ic_signout)
-                .withIdentifier(4).withName(R.string.signout_navigationdrawer);
+                .withIdentifier(2).withTypeface(font).withName(R.string.minutes_navigationdrawer);
 
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIcon(R.drawable.ic_free_minutes)
-                .withIdentifier(3).withName(R.string.free_minutes);
+                .withIdentifier(3).withTypeface(font).withName(R.string.free_minutes);
+
+        PrimaryDrawerItem item4 = new PrimaryDrawerItem().withIcon(R.drawable.ic_signout)
+                .withIdentifier(4).withTypeface(font).withName(R.string.signout_navigationdrawer);
 
 
         AccountHeader header = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.color.app_title_color)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(firebaseAuth.getCurrentUser().getDisplayName())
+                        new ProfileDrawerItem().withName(displayName)
                                 .withIcon(getResources().getDrawable(R.drawable.ic_launcher))
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
@@ -217,17 +223,29 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch (position) {
                             case 1:
-                                drawer.closeDrawer();
-                                startActivity(new Intent(MainActivity.this
-                                        , SessionsActivity.class));
+                                if (isUserLogged()) {
+                                    drawer.closeDrawer();
+                                    startActivity(new Intent(MainActivity.this
+                                            , SessionsActivity.class));
+                                } else {
+                                    finishToLoggin();
+                                }
                                 break;
                             case 2:
-                                drawer.closeDrawer();
-                                startPaymentActivity();
+                                if (isUserLogged()) {
+                                    drawer.closeDrawer();
+                                    startPaymentActivity();
+                                } else {
+                                    finishToLoggin();
+                                }
                                 break;
                             case 3:
-                                drawer.closeDrawer();
-                                freeMinutesDialog();
+                                if (isUserLogged()) {
+                                    drawer.closeDrawer();
+                                    freeMinutesDialog();
+                                } else {
+                                    finishToLoggin();
+                                }
                                 break;
                             case 4:
                                 logout();
@@ -240,6 +258,8 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
                 })
                 .withDrawerGravity(GravityCompat.START)
                 .build();
+        if (!isUserLogged())
+            drawer.updateItem(item4.withName("Sign up or login"));
     }
 
     private void copyToclipboard(String text){
@@ -353,7 +373,6 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
                     if (dataSnapshot.exists()) {
                         //get the id which start with given substring
                         for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                            Log.d(TAG, "onDataChange: " + dataSnapshot1.getKey());
                             checkIfPromocodeUsedBefore(dataSnapshot1.getKey());
                         }
                     }
@@ -491,23 +510,25 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
     }
 
     private void getStudentBalance() {
-        mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId())
-                .child("timeBalance").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Double balance = dataSnapshot.getValue(Double.class);
-                    if (balance != null) {
-                        drawer.updateBadge(2, new StringHolder((balance / 60) + ""));
+        if (isUserLogged()) {
+            mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId())
+                    .child("timeBalance").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Double balance = dataSnapshot.getValue(Double.class);
+                        if (balance != null) {
+                            drawer.updateBadge(2, new StringHolder((balance / 60) + ""));
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
     private void checkForNewVersion() {
@@ -618,10 +639,14 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
 
     private void logout() {
 
-        firebaseAuth.signOut();
-        // mGoogleSignInClient.signOut();
-        LoginManager.getInstance().logOut();
-        TwitterCore.getInstance().getSessionManager().clearActiveSession();
+        if (isUserLogged()) {
+            mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId()).child("tokenId")
+                    .removeValue();
+            firebaseAuth.signOut();
+            // mGoogleSignInClient.signOut();
+            LoginManager.getInstance().logOut();
+            TwitterCore.getInstance().getSessionManager().clearActiveSession();
+        }
 
         startActivity(new Intent(MainActivity.this, RegisteringActivity.class));
         finish();
@@ -661,12 +686,18 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
 
     @Override
     public void onItemClick(int position) {
-        if (PrefsHelper.getInstance(getApplicationContext()).getUserType().equals("student")) {
+        if (isUserLogged()) {
             checkBalanceAndLaunchActivity(sList.get(position));
         } else {
-            Toast.makeText(getApplicationContext(), R.string.wrong_message, Toast.LENGTH_SHORT).show();
+            finishToLoggin();
         }
 
+    }
+
+    private void finishToLoggin(){
+        msg(this,R.string.signup_or_login_first);
+        finish();
+        startActivity(new Intent(MainActivity.this,RegisteringActivity.class));
     }
 
     private void checkBalanceAndLaunchActivity(Subject subect) {
@@ -728,5 +759,9 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
                 return false;
         }
         return true;
+    }
+
+    private boolean isUserLogged(){
+        return firebaseAuth.getCurrentUser() != null;
     }
 }

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Moallem</string>
+    <string name="notification_channel_id" translatable="false">MoallemCH_002</string>
     <string name="deviceLangauge">default</string>
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
@@ -84,6 +85,7 @@
     <string name="language_school">Language School</string>
     <string name="free_minutes">Free Minutes</string>
     <string name="enter_phone_number">Please enter phone number</string>
+    <string name="signup_or_login_first">Please sign up or login first</string>
 
     <string-array name="egyptOperatersCode" translatable="false">
         <item>60201</item>

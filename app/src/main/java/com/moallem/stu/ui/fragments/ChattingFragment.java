@@ -122,7 +122,6 @@ public class ChattingFragment extends Fragment {
     private final long maxNumber = 3000000;
     private final String [] msgArgs = {"msg","msgType","senderId","senderType"};
 
-
     public ChattingFragment() {
         // Required empty public constructor
     }
@@ -162,10 +161,35 @@ public class ChattingFragment extends Fragment {
         reference = FirebaseDatabase.getInstance().getReference();
         mStorage = FirebaseStorage.getInstance().getReference();
         fileNameEndPoint = new RandomString(12,new Random()).nextString();
-        session = getActivity().getIntent().getParcelableExtra("session_extra");
+        getSessionInfo();
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         mFileName += "/"+fileNameEndPoint+".3gp";
         requestPermissions( permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+
+    }
+
+    private void getSessionInfo() {
+        Intent intent = getActivity().getIntent();
+        if (intent.hasExtra("session_extra")){
+            session = intent.getParcelableExtra("session_extra");
+        }else {
+            String teacherPic = intent.getExtras().getString("teacherPic");
+            String teachername = intent.getExtras().getString("teachername");
+            String teacherId = intent.getExtras().getString("teacherId");
+            String questionType = intent.getExtras().getString("questionType");
+            String nodeKey = intent.getExtras().getString("nodeKey");
+            boolean isFinished =intent.getExtras().getBoolean("isFinished");
+            boolean isStudentReachedZeroMins = intent.getExtras().getBoolean("isStudentReachedZeroMins");
+            String storageDataID = intent.getExtras().getString("storageDataID");
+            session.setTeacherPic(teacherPic);
+            session.setTeacherName(teachername);
+            session.setTeacherId(teacherId);
+            session.setQuestionType(questionType);
+            session.setKey(nodeKey);
+            session.setFinished(isFinished);
+            session.setStudentReachedZeroMins(isStudentReachedZeroMins);
+            session.setStorageDataID(storageDataID);
+        }
 
     }
 

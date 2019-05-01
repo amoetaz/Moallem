@@ -2,13 +2,18 @@ package com.moallem.stu.utilities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.support.annotation.StringRes;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.moallem.stu.R;
 import com.moallem.stu.data.PrefsHelper;
+import com.moallem.stu.ui.activities.MainActivity;
+import com.moallem.stu.ui.activities.RegisteringActivity;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -21,6 +26,14 @@ public class Utils {
 
     //TODO : replace chattingfragment variable
     public static long chatLenght = 0;
+
+    public static void msg(Context context , Object s){
+        Toast.makeText(context, s+"", Toast.LENGTH_SHORT).show();
+    }
+
+    public static void msg(Context context , int s){
+        Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+    }
 
     public static boolean checkIfNodesExists (DataSnapshot snapshot , String ... ss){
         for (String s : ss){
