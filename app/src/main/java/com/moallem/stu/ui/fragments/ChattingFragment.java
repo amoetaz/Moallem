@@ -19,6 +19,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -173,14 +174,15 @@ public class ChattingFragment extends Fragment {
         if (intent.hasExtra("session_extra")){
             session = intent.getParcelableExtra("session_extra");
         }else {
-            String teacherPic = intent.getExtras().getString("teacherPic");
-            String teachername = intent.getExtras().getString("teachername");
-            String teacherId = intent.getExtras().getString("teacherId");
-            String questionType = intent.getExtras().getString("questionType");
-            String nodeKey = intent.getExtras().getString("nodeKey");
-            boolean isFinished =intent.getExtras().getBoolean("isFinished");
-            boolean isStudentReachedZeroMins = intent.getExtras().getBoolean("isStudentReachedZeroMins");
-            String storageDataID = intent.getExtras().getString("storageDataID");
+            session = new Session();
+            String teacherPic = intent.getStringExtra("teacherPic");
+            String teachername = intent.getStringExtra("teachername");
+            String teacherId = intent.getStringExtra("teacherId");
+            String questionType = intent.getStringExtra("questionType");
+            String nodeKey = intent.getStringExtra("nodeKey");
+            boolean isFinished = Boolean.parseBoolean(intent.getStringExtra("isFinished"));
+            boolean isStudentReachedZeroMins = Boolean.parseBoolean(intent.getStringExtra("isStudentReachedZeroMins"));
+            String storageDataID = intent.getStringExtra("storageDataID");
             session.setTeacherPic(teacherPic);
             session.setTeacherName(teachername);
             session.setTeacherId(teacherId);
@@ -189,6 +191,7 @@ public class ChattingFragment extends Fragment {
             session.setFinished(isFinished);
             session.setStudentReachedZeroMins(isStudentReachedZeroMins);
             session.setStorageDataID(storageDataID);
+            Log.d(TAG, "getSessionInfos: "+session);
         }
 
     }

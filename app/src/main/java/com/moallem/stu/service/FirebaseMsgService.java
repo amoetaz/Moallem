@@ -1,5 +1,6 @@
 package com.moallem.stu.service;
 
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.media.RingtoneManager;
@@ -8,28 +9,61 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.moallem.stu.R;
 
+import static com.moallem.stu.utilities.FirebaseConstants.USERINFO_NODE;
+
 public class FirebaseMsgService extends FirebaseMessagingService {
 
+
+   /* @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        if (firebaseAuth.getCurrentUser() != null) {
+            databaseReference.child(USERINFO_NODE).child(firebaseAuth.getCurrentUser().getUid()).child("tokenId")
+                    .setValue(s);
+        }
+    }
+*/
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        String title = remoteMessage.getNotification().getTitle();
-        String body = remoteMessage.getNotification().getBody();
-        String clickAction = remoteMessage.getNotification().getClickAction();
+        String title = null;
+        String body = null;
+        String clickAction = null;
+        if (remoteMessage.getNotification() != null) {
+            title = remoteMessage.getNotification().getTitle();
+            body = remoteMessage.getNotification().getBody();
+            clickAction = remoteMessage.getNotification().getClickAction();
+        }
 
-        String teacherPic = remoteMessage.getData().get("teacherPic");
-        String teachername = remoteMessage.getData().get("teachername");
-        String teacherId = remoteMessage.getData().get("teacherId");
-        String questionType = remoteMessage.getData().get("questionType");
-        String nodeKey = remoteMessage.getData().get("nodeKey");
-        boolean isFinished = Boolean.parseBoolean(remoteMessage.getData().get("isFinished"));
-        boolean isStudentReachedZeroMins = Boolean.parseBoolean(remoteMessage.getData().get("isStudentReachedZeroMins"));
-        String storageDataID = remoteMessage.getData().get("storageDataID");
+        String teacherPic = null;
+        String teachername = null;
+        String teacherId = null;
+        String questionType = null;
+        String nodeKey = null;
+        String isFinished = null;
+        String isStudentReachedZeroMins = null;
+        String storageDataID = null;
+        if (remoteMessage.getData() != null) {
+            teacherPic = remoteMessage.getData().get("teacherPic");
+            teachername = remoteMessage.getData().get("teachername");
+            teacherId = remoteMessage.getData().get("teacherId");
+            questionType = remoteMessage.getData().get("questionType");
+            nodeKey = remoteMessage.getData().get("nodeKey");
+            isFinished =  remoteMessage.getData().get("isFinished");
+            isStudentReachedZeroMins = remoteMessage.getData().get("isStudentReachedZeroMins");
+            storageDataID = remoteMessage.getData().get("storageDataID");
+        }
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -40,7 +74,7 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                 .setContentText(body)
                 .setSound(alarmSound)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
-                .setPriority(NotificationCompat.PRIORITY_MAX);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         Intent intent = new Intent(clickAction);
         intent.putExtra("teacherPic",teacherPic);
@@ -58,10 +92,14 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                 ,PendingIntent.FLAG_UPDATE_CURRENT);
 
         mBuilder.setContentIntent(pendingIntent);
+
         int notificationId = (int)System.currentTimeMillis();
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
         notificationManager.notify(notificationId, mBuilder.build());
+/*
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.notify(notificationId , mBuilder.build());*/
     }
 }

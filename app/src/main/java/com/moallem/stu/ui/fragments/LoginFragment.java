@@ -39,6 +39,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.moallem.stu.R;
 import com.moallem.stu.ui.activities.MainActivity;
 import com.moallem.stu.utilities.FirebaseUtils;
@@ -351,15 +352,19 @@ public class LoginFragment extends Fragment {
 
 
     private void setTokenID(String userId){
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( getActivity()
+        /*FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( getActivity()
                 ,  new OnSuccessListener<InstanceIdResult>() {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
                 String mToken = instanceIdResult.getToken();
-                databaseReference.child(USERINFO_NODE).child(userId).child("tokenId")
-                        .setValue(mToken);
+
             }
-        });
+        });*/
+
+        databaseReference.child(USERINFO_NODE).child(userId).child("tokenId")
+                .setValue(userId);
+
+        FirebaseMessaging.getInstance().subscribeToTopic(userId);
 
     }
 

@@ -30,9 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -80,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     private FirebaseAuth firebaseAuth;
-    private GoogleSignInClient mGoogleSignInClient;
+    //private GoogleSignInClient mGoogleSignInClient;
     private DatabaseReference mDatabase;
     private SampleRecyclerViewAdapter rcAdapter;
     private ArrayList<Subject> sList = new ArrayList<>();
@@ -617,7 +614,7 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
 
     }
 
-    private void configereGoogleSignin() {
+    /*private void configereGoogleSignin() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -625,7 +622,7 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
 
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -640,8 +637,8 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
     private void logout() {
 
         if (isUserLogged()) {
-            mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId()).child("tokenId")
-                    .removeValue();
+            /*mDatabase.child(USERINFO_NODE).child(Utils.getCurrentUserId()).child("tokenId")
+                    .removeValue();*/
             firebaseAuth.signOut();
             // mGoogleSignInClient.signOut();
             LoginManager.getInstance().logOut();
@@ -711,9 +708,13 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
                     if (balance != null && balance >= 60) {
                         checkForUnfinishedSession(subect);
                     } else {
+                        startActivity(new Intent(MainActivity.this
+                                , PaymentActivity.class));
                         Toast.makeText(getApplicationContext(), "Your balance must be more or equal 1 minutes", Toast.LENGTH_LONG).show();
                     }
                 } else {
+                    startActivity(new Intent(MainActivity.this
+                            , PaymentActivity.class));
                     Toast.makeText(getApplicationContext(), "Your balance must be more or equal 1 minutes", Toast.LENGTH_LONG).show();
                 }
             }

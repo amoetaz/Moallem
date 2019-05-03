@@ -164,6 +164,7 @@ public class SendingQuestionFragment extends Fragment {
                         newSession.put("storageDataID",storageDataID);
                         newSession.put(ISFINISHED_NODE,false);
                         newSession.put(DATE_NODE,getCurrentDate());
+                        newSession.put("nodeKey",node.getKey());
 
                         node.setValue(newSession);
                         progressBar.setVisibility(View.INVISIBLE);

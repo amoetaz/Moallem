@@ -50,6 +50,28 @@ public class Session implements Parcelable {
         storageDataID = in.readString();
     }
 
+    @Override
+    public String toString() {
+        return "Session{" +
+                "questionType='" + questionType + '\'' +
+                ", isReplyed=" + isReplyed +
+                ", isFinished=" + isFinished +
+                ", isTeacherOnline=" + isTeacherOnline +
+                ", isStudentOnline=" + isStudentOnline +
+                ", isStudentReachedZeroMins=" + isStudentReachedZeroMins +
+                ", date='" + date + '\'' +
+                ", studentName='" + studentName + '\'' +
+                ", teacherName='" + teacherName + '\'' +
+                ", studentId='" + studentId + '\'' +
+                ", teacherId='" + teacherId + '\'' +
+                ", teacherPic='" + teacherPic + '\'' +
+                ", firstPic='" + firstPic + '\'' +
+                ", firstComment='" + firstComment + '\'' +
+                ", key='" + key + '\'' +
+                ", storageDataID='" + storageDataID + '\'' +
+                '}';
+    }
+
     public static final Creator<Session> CREATOR = new Creator<Session>() {
         @Override
         public Session createFromParcel(Parcel in) {

@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.moallem.stu.R;
 import com.moallem.stu.ui.activities.MainActivity;
 import com.moallem.stu.utilities.FirebaseUtils;
@@ -67,7 +68,7 @@ public class SignupFragment extends Fragment {
     RadioButton radiobutton1;
     @BindView(R.id.radiobutton2)
     RadioButton radiobutton2;
-    private String schoolType ;
+    private String schoolType;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference mDatabase;
 
@@ -88,17 +89,10 @@ public class SignupFragment extends Fragment {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful() && getActivity() != null) {
                         if (user.isEmailVerified()) {
-                            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( getActivity()
-                                    ,  new OnSuccessListener<InstanceIdResult>() {
-                                        @Override
-                                        public void onSuccess(InstanceIdResult instanceIdResult) {
-                                            String mToken = instanceIdResult.getToken();
-                                            mDatabase.child(USERINFO_NODE).child(firebaseAuth.getCurrentUser().getUid()).child("tokenId")
-                                                    .setValue(mToken);
-                                            getActivity().finish();
-                                            startActivity(new Intent(getContext(), MainActivity.class));
-                                        }
-                                    });
+
+                            setTokenID(firebaseAuth.getCurrentUser().getUid());
+                            getActivity().finish();
+                            startActivity(new Intent(getContext(), MainActivity.class));
 
                         }
                     }
@@ -118,28 +112,28 @@ public class SignupFragment extends Fragment {
         RadioGroup rg = (RadioGroup) view.findViewById(R.id.school_type);
 
         int checkedRadioButtonId = rg.getCheckedRadioButtonId();
-        if (checkedRadioButtonId == radiobutton2.getId()){
+        if (checkedRadioButtonId == radiobutton2.getId()) {
             schoolType = radiobutton2.getText().toString();
-        }else {
+        } else {
             schoolType = radiobutton1.getText().toString();
         }
         //Toast.makeText(getActivity(), schoolType, Toast.LENGTH_SHORT).show();
-            rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    switch (checkedId) {
-                        case R.id.radiobutton1:
-                            schoolType = radiobutton1.getText().toString();
-                            //Toast.makeText(getActivity(), schoolType, Toast.LENGTH_SHORT).show();
-                            break;
-                        case R.id.radiobutton2:
-                            schoolType = radiobutton2.getText().toString();
-                            //Toast.makeText(getActivity(), schoolType, Toast.LENGTH_SHORT).show();
-                            break;
-                        default:
-                            break;
-                    }
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radiobutton1:
+                        schoolType = radiobutton1.getText().toString();
+                        //Toast.makeText(getActivity(), schoolType, Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.radiobutton2:
+                        schoolType = radiobutton2.getText().toString();
+                        //Toast.makeText(getActivity(), schoolType, Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
                 }
-            });
+            }
+        });
         return view;
     }
 
@@ -250,17 +244,9 @@ public class SignupFragment extends Fragment {
                                         @Override
                                         public void onCompleteListener() {
 
-                                            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( getActivity()
-                                                    ,  new OnSuccessListener<InstanceIdResult>() {
-                                                        @Override
-                                                        public void onSuccess(InstanceIdResult instanceIdResult) {
-                                                            String mToken = instanceIdResult.getToken();
-                                                            mDatabase.child(USERINFO_NODE).child(firebaseAuth.getCurrentUser().getUid()).child("tokenId")
-                                                                    .setValue(mToken);
-                                                            getActivity().finish();
-                                                            startActivity(new Intent(getContext(), MainActivity.class));
-                                                        }
-                                                    });
+                                            setTokenID(firebaseAuth.getCurrentUser().getUid());
+                                            getActivity().finish();
+                                            startActivity(new Intent(getContext(), MainActivity.class));
 
                                         }
                                     });
@@ -318,6 +304,23 @@ public class SignupFragment extends Fragment {
             InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private void setTokenID(String userId) {
+        /*FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( getActivity()
+                ,  new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String mToken = instanceIdResult.getToken();
+
+            }
+        });*/
+
+        mDatabase.child(USERINFO_NODE).child(userId).child("tokenId")
+                .setValue(userId);
+
+        FirebaseMessaging.getInstance().subscribeToTopic(userId);
+
     }
 
 }
