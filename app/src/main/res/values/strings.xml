@@ -80,12 +80,17 @@
     <string name="sending_toast">Sending …</string>
     <string name="press_mic_and_release">Press mic icon then release when finish</string>
     <string name="permissions_denied">permissions denied</string>
-    <string name="get50off" translatable="false">Get 5 minutes when you refer a friend to use Moallem\ncopy the code and let your friend paste in his app</string>
+    <string name="get50off" >Get 5 minutes when you refer a friend to use Moallem\ncopy the code and let your friend paste in his app</string>
     <string name="arabic_school">Arabic School</string>
     <string name="language_school">Language School</string>
     <string name="free_minutes">Free Minutes</string>
     <string name="enter_phone_number">Please enter phone number</string>
     <string name="signup_or_login_first">Please sign up or login first</string>
+    <string name="empty_balance_msg">Your balance must be more or equal 1 minutes</string>
+    <string name="free_sessions">Free Sessions!</string>
+    <string name="click_to_copy_code">Click to copy code!</string>
+    <string name="enter_your_promo_gift_code">Enter your promo/gift code</string>
+    <string name="signup_or_login">Sign up or login</string>
 
     <string-array name="egyptOperatersCode" translatable="false">
         <item>60201</item>

@@ -206,10 +206,7 @@ public class ChattingFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setStackFromEnd(true);
         rvChatList.setLayoutManager(linearLayoutManager);
-        CircleImageView imageTeacher = toolbar.findViewById(R.id.user_image1_photo);
-        TextView imageName = toolbar.findViewById(R.id.teacher_name_textview);
-        Glide.with(getContext()).load(session.getTeacherPic()).into(imageTeacher);
-        imageName.setText(session.getTeacherName());
+        publishHeaderUI();
         checkIFSessionEdned();
         checkIfStudentReachedZeroMins();
         listenToTeacherStatus();
@@ -257,6 +254,15 @@ public class ChattingFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void publishHeaderUI() {
+        CircleImageView imageTeacher = toolbar.findViewById(R.id.user_image1_photo);
+        TextView imageName = toolbar.findViewById(R.id.teacher_name_textview);
+        if (getContext() != null) {
+            Glide.with(getContext()).load(session.getTeacherPic()).into(imageTeacher);
+        }
+        imageName.setText(session.getTeacherName());
     }
 
     @Override
@@ -405,7 +411,7 @@ public class ChattingFragment extends Fragment {
 
     private void startChatTimer(){
         if (chatTimer == null) {
-            chatTimer = new CountDownTimer(300000,1000) {
+            chatTimer = new CountDownTimer(maxNumber,1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
 

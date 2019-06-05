@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
                 .withDrawerGravity(GravityCompat.START)
                 .build();
         if (!isUserLogged())
-            drawer.updateItem(item4.withName("Sign up or login"));
+            drawer.updateItem(item4.withName(R.string.signup_or_login));
     }
 
     private void copyToclipboard(String text){
@@ -530,7 +530,7 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
 
     private void checkForNewVersion() {
         mDatabase.child("versionsUpdateNotify").child("studentApp")
-                .child("isVersion1-0-4Updated").addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("isVersion1-0-5Updated").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -555,12 +555,6 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
         });
     }
 
-    private void checkIfUserNotLogin() {
-        if (firebaseAuth.getCurrentUser() == null) {
-            startActivity(new Intent(this, RegisteringActivity.class));
-            finish();
-        }
-    }
 
     private void initList() {
 
@@ -710,12 +704,12 @@ public class MainActivity extends AppCompatActivity implements SampleRecyclerVie
                     } else {
                         startActivity(new Intent(MainActivity.this
                                 , PaymentActivity.class));
-                        Toast.makeText(getApplicationContext(), "Your balance must be more or equal 1 minutes", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.empty_balance_msg, Toast.LENGTH_LONG).show();
                     }
                 } else {
                     startActivity(new Intent(MainActivity.this
                             , PaymentActivity.class));
-                    Toast.makeText(getApplicationContext(), "Your balance must be more or equal 1 minutes", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.empty_balance_msg, Toast.LENGTH_LONG).show();
                 }
             }
 

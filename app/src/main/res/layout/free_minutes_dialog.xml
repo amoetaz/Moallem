@@ -45,7 +45,7 @@
             android:textColor="#fff"
             android:fontFamily="@font/roboto_regular"
             android:textSize="22sp"
-            android:text="Free Sessions!"
+            android:text="@string/free_sessions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -72,7 +72,7 @@
             android:textColor="#fff"
             android:fontFamily="@font/roboto_regular"
             android:textSize="20sp"
-            android:text="Click to copy code! "
+            android:text="@string/click_to_copy_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -114,7 +114,7 @@
         android:textColor="@color/app_text_color"
         android:fontFamily="@font/roboto_regular"
         android:textSize="20sp"
-        android:text="Enter your promo/gift code"
+        android:text="@string/enter_your_promo_gift_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

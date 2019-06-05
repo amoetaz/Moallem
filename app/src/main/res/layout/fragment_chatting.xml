@@ -30,6 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp">
         <TextView
+            android:fontFamily="@font/roboto_regular"
             android:visibility="gone"
             android:gravity="center"
             android:textColor="@color/colorPrimary"
@@ -50,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
         <TextView
+            android:fontFamily="@font/roboto_regular"
             android:visibility="gone"
             android:gravity="center"
             android:textColor="@color/colorPrimary"
@@ -70,6 +72,7 @@
             android:layout_width="40dp"
             android:layout_height="match_parent" />
         <EditText
+            android:fontFamily="@font/roboto_regular"
             android:hint="@string/enter_a_message"
             android:id="@+id/msg_text"
             android:textSize="15sp"

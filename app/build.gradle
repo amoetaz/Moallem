@@ -18,8 +18,8 @@ android {
         applicationId "com.moallem.stu"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 6
-        versionName "1.0.4"
+        versionCode 7
+        versionName "1.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -58,6 +58,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-crash:16.2.1'
     implementation 'com.google.firebase:firebase-messaging:17.6.0'
     implementation 'com.firebase:firebase-client-android:2.5.0'
+    //to fix error
+    implementation 'com.google.firebase:firebase-iid:17.0.3'
     //implementation 'com.google.android.gms:play-services-auth:16.0.1'
     //facebook
     implementation 'com.facebook.android:facebook-login:4.38.0'

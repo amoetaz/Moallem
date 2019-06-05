@@ -74,6 +74,12 @@
     <string name="free_minutes">دقائق مجانية</string>
     <string name="enter_phone_number">من فضلك ادخل رقم الموبايل</string>
     <string name="signup_or_login_first">من فضلك قم بعمل حساب او بتسجيل الدخول اولا</string>
+    <string name="empty_balance_msg">يجب ان يكون رصيدك اعلي او يساوي دقيقة</string>
+    <string name="free_sessions">دقائق مجانيه!</string>
+    <string name="get50off" >أحصل علي 5 دقائق مجانية عندما تخبر صديقك عن تطبيق معلم انسخ الكود واجعل صديقك يستخدمه في تطبيقه</string>
+    <string name="click_to_copy_code">اضغط لكي تنسخ الكود!</string>
+    <string name="enter_your_promo_gift_code">ادخل البروموكود المرسل إليك</string>
+    <string name="signup_or_login">عمل حساب او تسجيل الدخول</string>
 
     <string-array name="egyptOperatersName">
         <item>أورانج</item>
