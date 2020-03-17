@@ -4,9 +4,9 @@ package com.moallem.stu.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,16 +21,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.moallem.stu.R;
 import com.moallem.stu.ui.activities.MainActivity;
@@ -239,12 +239,13 @@ public class SignupFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (getActivity() != null) {
-                            FirebaseUtils.setUerType(getContext(), firebaseAuth.getCurrentUser().getUid(),
+                            String userId = firebaseAuth.getCurrentUser().getUid();
+                            FirebaseUtils.setUerType(getContext(), userId,
                                     new FirebaseUtils.Action() {
                                         @Override
                                         public void onCompleteListener() {
-
-                                            setTokenID(firebaseAuth.getCurrentUser().getUid());
+                                            updateFirebaseBalanceValues(userId , 15);
+                                            setTokenID(userId);
                                             getActivity().finish();
                                             startActivity(new Intent(getContext(), MainActivity.class));
 
@@ -323,4 +324,26 @@ public class SignupFragment extends Fragment {
 
     }
 
+    public void updateFirebaseBalanceValues(String userID,int value) {
+        Double secs = (double) (value * 60);
+
+        mDatabase.child(USERINFO_NODE).child(userID).child("timeBalance")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            Double balance = dataSnapshot.getValue(Double.class);
+                            if (balance != null) {
+                                balance += secs;
+                                mDatabase.child(USERINFO_NODE).child(userID).child("timeBalance").setValue(balance);
+                            }
+                        } else {
+                            mDatabase.child(USERINFO_NODE).child(userID).child("timeBalance").setValue(secs);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {}
+                });
+    }
 }

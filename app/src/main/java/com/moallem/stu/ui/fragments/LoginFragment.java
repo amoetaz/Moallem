@@ -4,12 +4,11 @@ package com.moallem.stu.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,22 +27,21 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.TwitterAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.moallem.stu.R;
 import com.moallem.stu.ui.activities.MainActivity;
 import com.moallem.stu.utilities.FirebaseUtils;
-import com.moallem.stu.utilities.Utils;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
@@ -276,6 +274,7 @@ public class LoginFragment extends Fragment {
         String uid = firebaseAuth.getCurrentUser().getUid();
 
         if (newUser){
+            updateFirebaseBalanceValues(uid , 15);
             String userEmail = firebaseAuth.getCurrentUser().getEmail();
             databaseReference.child(USERINFO_NODE).child(uid)
                     .child(USERNAME_NODE).setValue(firebaseAuth.getCurrentUser().getDisplayName());
@@ -289,6 +288,29 @@ public class LoginFragment extends Fragment {
             }
         }
 
+    }
+
+    public void updateFirebaseBalanceValues(String userID,int value) {
+        Double secs = (double) (value * 60);
+
+        databaseReference.child(USERINFO_NODE).child(userID).child("timeBalance")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            Double balance = dataSnapshot.getValue(Double.class);
+                            if (balance != null) {
+                                balance += secs;
+                                databaseReference.child(USERINFO_NODE).child(userID).child("timeBalance").setValue(balance);
+                            }
+                        } else {
+                            databaseReference.child(USERINFO_NODE).child(userID).child("timeBalance").setValue(secs);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {}
+                });
     }
 
     private void configTwitterSdk() {

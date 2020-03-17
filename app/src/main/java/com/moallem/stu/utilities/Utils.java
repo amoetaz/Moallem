@@ -2,9 +2,8 @@ package com.moallem.stu.utilities;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,8 +11,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.moallem.stu.R;
 import com.moallem.stu.data.PrefsHelper;
-import com.moallem.stu.ui.activities.MainActivity;
-import com.moallem.stu.ui.activities.RegisteringActivity;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;

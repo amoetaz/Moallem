@@ -1,7 +1,7 @@
 package com.moallem.stu.ui.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.moallem.stu.R;
 import com.moallem.stu.ui.fragments.SessionsFragment;

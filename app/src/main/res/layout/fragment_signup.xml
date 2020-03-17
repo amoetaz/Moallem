@@ -40,7 +40,7 @@
             android:layout_below="@id/signup_title"
             android:src="@drawable/profileicon" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/signup_textinput_username"
             android:layout_below="@id/signup_title"
             android:layout_marginStart="40dp"
@@ -50,19 +50,19 @@
             android:theme="@style/TextLabel"
             android:hint="@string/username_hint">
 
-            <android.support.v7.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 style="@style/EdittextStyle"
                 android:id="@+id/signup_username"
                 android:inputType="text" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             style="@style/imagesignuploginStyle"
             android:layout_below="@id/signup_textinput_username"
             android:src="@drawable/emailicomn" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:theme="@style/TextLabel"
             android:id="@+id/signup_textinput_email"
             android:layout_below="@id/signup_textinput_username"
@@ -76,14 +76,14 @@
                 style="@style/EdittextStyle"
                 android:id="@+id/signup_email"
                 android:inputType="textEmailAddress" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             style="@style/imagesignuploginStyle"
             android:layout_below="@id/signup_textinput_email"
             android:src="@drawable/lockicon_copy" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:theme="@style/TextLabel"
             android:id="@+id/signup_textinput_password"
             android:layout_below="@id/signup_textinput_email"
@@ -98,7 +98,7 @@
                 android:id="@+id/signup_password"
                 android:inputType="textPassword" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
 
@@ -108,7 +108,7 @@
             android:layout_below="@id/signup_textinput_password"
             android:src="@drawable/graduation_icon" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:theme="@style/TextLabel"
             android:id="@+id/signup_textinput_edu"
             android:layout_below="@id/signup_textinput_password"
@@ -126,7 +126,7 @@
                 android:layout_height="55dp"
                 android:inputType="textEmailAddress" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <RadioGroup
 

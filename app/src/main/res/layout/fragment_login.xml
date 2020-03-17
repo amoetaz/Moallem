@@ -38,7 +38,7 @@
             android:layout_below="@id/login_title"
             android:src="@drawable/emailicomn" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:theme="@style/TextLabel"
             android:id="@+id/login_textinput_email"
             android:layout_below="@id/login_title"
@@ -54,14 +54,14 @@
                 android:id="@+id/login_email"
                 android:inputType="textEmailAddress" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             style="@style/imagesignuploginStyle"
             android:layout_below="@id/login_textinput_email"
             android:src="@drawable/lockicon_copy" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:theme="@style/TextLabel"
             android:id="@+id/login_textinput_password"
             android:layout_below="@id/login_textinput_email"
@@ -75,7 +75,7 @@
                 style="@style/EdittextStyle"
                 android:id="@+id/login_password"
                 android:inputType="textPassword" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         <Button
